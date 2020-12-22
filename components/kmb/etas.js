@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { format } from 'date-fns';
 import useTranslation from '~/hooks/useTranslation';
 
-const Etas = ({stopping}) => {
+const Etas = ({stopping, setRefresh = () => {}, refresh = false}) => {
     const [times, setTimes] = useState([]);
     const { t } = useTranslation();
     useEffect(() => {
@@ -11,6 +11,12 @@ const Etas = ({stopping}) => {
             getSchedules();
         }
     }, [stopping])
+
+    useEffect(() => {
+        if(stopping) {
+            getSchedules();
+        }
+    }, [refresh])
 
     const getSchedules = async () => {
         try {
@@ -20,8 +26,14 @@ const Etas = ({stopping}) => {
             if(res?.data?.data){
                 setTimes(res?.data?.data);
             }
+            if(refresh) {
+                setRefresh(false);
+            }
         } catch (err) {
             console.log(err);
+            if(refresh) {
+                setRefresh(false);
+            }
         }
     }
 
