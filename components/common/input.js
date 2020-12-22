@@ -16,6 +16,15 @@ const InputWrapper = styled.div`
   position: relative;
   height: 40px;
   margin-bottom: 10px;
+  button {
+      background-color: ${({theme})=>theme.toggleBackground};
+      color: ${({theme})=>theme.inactiveMenu};
+      width: 80px;
+      height: 40px;
+      appearance: none;
+      border: none;
+      font-size: 16px;
+  }
 `;
 
 const Input = styled.input`
@@ -50,7 +59,7 @@ const SearchInput = (props) => {
           placeholder={t(props.placeholder)}
           aria-labelledby={t(props.placeholder)}
         />
-        <button onClick={props.onClickButton}>Submit</button>
+        <button onClick={props.onClickButton}>{t('Submit')}</button>
       </InputWrapper>
 
     </Container>

@@ -1,11 +1,13 @@
-import useTranslation from '~/hooks/useTranslation';
-import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Kmb from 'js-kmb-api';
+
+import useTranslation from '~/hooks/useTranslation';
 import { useStorage } from '~/hooks/useStorage';
-import Etas from './kmb/etas';
-import Refresh from './refresh';
-import SearchInput from './common/input';
+
+import Stops from '~/components/kmb/stops';
+import Routes from '~/components/kmb/routes';
+import SearchInput from '~/components/common/input';
 
 const Heading = styled.h2`
   color: ${(props) => props.theme.text};
@@ -27,21 +29,14 @@ const Container = styled.div`
   }
 `;
 
-const SubHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
 const Home = () => {
-  const { locale, t } = useTranslation();
+  const { locale } = useTranslation();
   const {localStorage, sessionStorage} = useStorage();
   const [kmb, setKmb] = useState(null);
   const [busNumber, setBusNumber] = useState('');
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [stops, setStops] = useState([]);
-  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if(localStorage && sessionStorage) {
@@ -86,11 +81,9 @@ const Home = () => {
   const getStopsFromRoute = async route => {
     setStops([]);
     const stoppings = await route?.getStoppings();
-    console.log(stoppings);
+    // console.log(stoppings);
     setStops(stoppings);
   }
-
-  const onClickRefresh = () => setRefresh(true);
 
   return (
     <Container>
@@ -102,30 +95,9 @@ const Home = () => {
           onChange={(e) => setBusNumber(e.target.value?.toUpperCase())} 
           value={busNumber}
           onClickButton={getRoutes}
-          />
-        <div>
-          <h5>Routes</h5>
-          <ol>
-          {routes?.map(route => (
-            <li key={`${route?.route?.number}_${route?.route?.bound}`} onClick={() => setSelectedRoute(route)}>
-              <div>{route.origin} {"\u2192"} {route.destination}</div>
-            </li>
-          ))}
-          </ol>
-        </div>
-        <div>
-          <SubHeader>
-            <h5>Bus stops</h5>
-            <Refresh onClick={onClickRefresh}/>
-          </SubHeader>
-          <ol>
-            {stops?.map(stop => {
-              return (
-                <li key={`${stop?.stop?.id}_${stop?.sequence}_${locale}`}>{stop?.stop?.name} <Etas setRefresh={setRefresh} refresh={refresh} stopping={stop} /></li>
-              )
-            })}
-          </ol>
-        </div>
+        />
+        <Routes routes={routes} onClickRoute={setSelectedRoute}/>
+        <Stops stops={stops} />
       </div>
     </Container>
   );

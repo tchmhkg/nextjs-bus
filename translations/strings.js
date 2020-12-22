@@ -9,6 +9,8 @@ const strings = {
     "From": "From",
     "To": "To",
     "Last Bus": "Last Bus",
+    "Search": "Search",
+    "Submit": "Submit",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -20,6 +22,8 @@ const strings = {
     "From": "由",
     "To": "到",
     "Last Bus": "尾班車",
+    "Search": "搜尋",
+    "Submit": "提交",
   },
 };
 
