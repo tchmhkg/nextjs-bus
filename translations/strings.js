@@ -8,6 +8,7 @@ const strings = {
     "Slow moving": "Slow moving",
     "From": "From",
     "To": "To",
+    "Last Bus": "Last Bus",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -18,6 +19,7 @@ const strings = {
     "Slow moving": "行車緩慢",
     "From": "由",
     "To": "到",
+    "Last Bus": "尾班車",
   },
 };
 
