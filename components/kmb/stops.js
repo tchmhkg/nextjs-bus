@@ -8,6 +8,21 @@ const SubHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  h5 {
+    margin: 5px 0;
+  }
+`;
+
+const List = styled.ol`
+  height: 400px;
+  overflow-y: auto;
+  li {
+    margin: 3px 0;
+    cursor: pointer;
+    .eta-item {
+      cursor: default;
+    }
+  }
 `;
 
 const Stops = ({ stops }) => {
@@ -22,7 +37,7 @@ const Stops = ({ stops }) => {
         <h5>Bus stops</h5>
         <Refresh onClick={onClickRefresh} />
       </SubHeader>
-      <ol>
+      <List>
         {stops?.map((stop) => {
           return (
             <Stop
@@ -33,7 +48,7 @@ const Stops = ({ stops }) => {
             />
           );
         })}
-      </ol>
+      </List>
     </div>
   );
 };

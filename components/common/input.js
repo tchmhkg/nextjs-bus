@@ -4,7 +4,12 @@ import styled from "styled-components";
 import useTranslation from "~/hooks/useTranslation";
 
 const Container = styled.div`
-  position: relative;
+  position: sticky;
+  z-index: 10;
+  top: 70px;
+  left: 0;
+  padding: 0 15px;
+  margin: 0 -15px;
 `;
 
 const InputWrapper = styled.div`
@@ -15,7 +20,6 @@ const InputWrapper = styled.div`
   transition: background-color 200ms linear;
   position: relative;
   height: 40px;
-  margin-bottom: 10px;
   button {
       background-color: ${({theme})=>theme.toggleBackground};
       color: ${({theme})=>theme.inactiveMenu};

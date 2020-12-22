@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import Etas from './etas';
 
 const Stop = ({ stop, setRefresh = () => {}, refresh = false }) => {
+  const [open, setOpen] = useState(false);
+  const toggle = () => setOpen((prev) => !prev);
+
   return (
     <li>
-      {stop?.stop?.name}{' '}
-      <Etas setRefresh={setRefresh} refresh={refresh} stopping={stop} />
+      <div onClick={toggle}>{stop?.stop?.name}</div>
+      {open && (
+        <Etas setRefresh={setRefresh} refresh={refresh} stopping={stop} />
+      )}
     </li>
   );
 };
