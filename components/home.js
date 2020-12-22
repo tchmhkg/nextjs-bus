@@ -5,6 +5,7 @@ import Kmb from 'js-kmb-api';
 import { useStorage } from '~/hooks/useStorage';
 import Etas from './kmb/etas';
 import Refresh from './refresh';
+import SearchInput from './common/input';
 
 const Heading = styled.h2`
   color: ${(props) => props.theme.text};
@@ -85,6 +86,7 @@ const Home = () => {
   const getStopsFromRoute = async route => {
     setStops([]);
     const stoppings = await route?.getStoppings();
+    console.log(stoppings);
     setStops(stoppings);
   }
 
@@ -96,8 +98,11 @@ const Home = () => {
         <Heading>Next Bus</Heading>
       </Header>
       <div>
-        <input onChange={(e) => setBusNumber(e.target.value?.toUpperCase())} value={busNumber} />
-        <button onClick={getRoutes}>Submit</button>
+        <SearchInput
+          onChange={(e) => setBusNumber(e.target.value?.toUpperCase())} 
+          value={busNumber}
+          onClickButton={getRoutes}
+          />
         <div>
           <h5>Routes</h5>
           <ol>
