@@ -28,6 +28,8 @@ const InputWrapper = styled.div`
       appearance: none;
       border: none;
       font-size: 16px;
+      border-radius: 5px;
+      margin-left: 5px;
   }
 `;
 
@@ -39,6 +41,7 @@ const Input = styled.input`
   transition: background-color 200ms linear;
   color: ${props => props.theme.text};
   border: 1px solid ${props => props.theme.borderAlt};
+  border-radius: 5px;
 `;
 
 const SearchInput = (props) => {

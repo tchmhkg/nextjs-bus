@@ -54,7 +54,7 @@ const Etas = ({ stopping, setRefresh = () => {}, refresh = false }) => {
   return (
     <Container>
       {loading
-        ? t('Loading...')
+        ? <div className="eta-item">{t('Loading...')}</div>
         : ((times && times.length) ? times?.map((time, i) => {
             if (!time.realtime && time.remark) {
               return (
