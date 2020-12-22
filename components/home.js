@@ -87,7 +87,7 @@ const Home = () => {
         <Heading>Next Bus</Heading>
       </Header>
       <div>
-        <input onChange={(e) => setBusNumber(e.target.value)} value={busNumber} />
+        <input onChange={(e) => setBusNumber(e.target.value?.toUpperCase())} value={busNumber} />
         <button onClick={getRoutes}>Submit</button>
         <div>
           <h5>Routes</h5>

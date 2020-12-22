@@ -65,24 +65,24 @@ export default class MyDocument extends Document {
           />
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:url" content="https://truman.vercel.app" />
-          <meta name="twitter:title" content="NextMTRTrain" />
-          <meta name="twitter:description" content="Get MTR Schedule" />
+          <meta name="twitter:title" content="NextBus" />
+          <meta name="twitter:description" content="Get Bus Schedule" />
           <meta
             name="twitter:image"
-            content="https://next-mtr.vercel.app/assets/icon-192x192.png"
+            content="https://nextjs-bus.vercel.app/assets/icon-192x192.png"
           />
           <meta name="twitter:creator" content="@trumancheung" />
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="NextMTRTrain" />
-          <meta property="og:description" content="Get MTR Schedule" />
-          <meta property="og:site_name" content="NextMTRTrain" />
+          <meta property="og:title" content="NextBus" />
+          <meta property="og:description" content="Get Bus Schedule" />
+          <meta property="og:site_name" content="NextBus" />
           <meta
             property="og:url"
-            content="https://next-mtr.vercel.app/assets/icon-192x192.png"
+            content="https://nextjs-bus.vercel.app/assets/icon-192x192.png"
           />
           <meta
             property="og:image"
-            content="https://next-mtr.vercel.app/assets/icon-192x192.png"
+            content="https://nextjs-bus.vercel.app/assets/icon-192x192.png"
           />
           <link
             href="/splashscreens/iphone5_splash.png"

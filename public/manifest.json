@@ -1,6 +1,6 @@
 {
-  "name": "NextMtrTrain",
-  "short_name": "NextMtrTrain",
+  "name": "NextBus",
+  "short_name": "NextBus",
   "theme_color": "#7F00FF",
   "background_color": "#FFFFFF",
   "display": "standalone",
