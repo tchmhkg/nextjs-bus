@@ -5,13 +5,15 @@ import { format } from 'date-fns';
 import useTranslation from '~/hooks/useTranslation';
 
 const Container = styled.div`
-    .eta-item {
-        margin-left: 10px;
-    }
+  .eta-item {
+    margin-left: 10px;
+    font-size: 16px;
+  }
 `;
 
 const Etas = ({ stopping, setRefresh = () => {}, refresh = false }) => {
   const [times, setTimes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   useEffect(() => {
     if (stopping) {
@@ -27,6 +29,7 @@ const Etas = ({ stopping, setRefresh = () => {}, refresh = false }) => {
 
   const getSchedules = async () => {
     try {
+      setLoading(true);
       const res = await Axios.get('/api/bus/kmb-eta', {
         params: { stopping: JSON.stringify(stopping) },
       });
@@ -36,27 +39,37 @@ const Etas = ({ stopping, setRefresh = () => {}, refresh = false }) => {
       if (refresh) {
         setRefresh(false);
       }
+      setLoading(false);
     } catch (err) {
       console.log(err);
       if (refresh) {
         setRefresh(false);
       }
+      setLoading(false);
     }
   };
 
-  if (!times || !times?.length) return null;
+//   if (!times || !times?.length) return null;
 
   return (
     <Container>
-      {times
-        ?.map((time, i) => {
-          if (!time.realtime && time.remark) {
-            return <div className="eta-item" key={time.time + i}>{`${format(new Date(time.time), 'HH:mm')} (${t(
-              time.remark
-            )})`}</div>;
-          }
-          return <div className="eta-item" key={time.time + i}>{format(new Date(time.time), 'HH:mm')}</div>;
-        })}
+      {loading
+        ? t('Loading...')
+        : ((times && times.length) ? times?.map((time, i) => {
+            if (!time.realtime && time.remark) {
+              return (
+                <div className="eta-item" key={time.time + i}>{`${format(
+                  new Date(time.time),
+                  'HH:mm'
+                )} (${t(time.remark)})`}</div>
+              );
+            }
+            return (
+              <div className="eta-item" key={time.time + i}>
+                {format(new Date(time.time), 'HH:mm')}
+              </div>
+            );
+          }) : <div className="eta-item">{t('No schedule')}</div>)}
     </Container>
   );
 };

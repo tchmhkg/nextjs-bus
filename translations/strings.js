@@ -21,6 +21,7 @@ const strings = {
     "Scheduled KMB": "Scheduled KMB",
     "Scheduled CTB": "Scheduled CTB",
     "Scheduled NWFB": "Scheduled NWFB",
+    "No schedule": "No schedule",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -44,6 +45,7 @@ const strings = {
     "Scheduled KMB": "預定班次 九巴",
     "Scheduled CTB": "預定班次 城巴",
     "Scheduled NWFB": "預定班次 新巴",
+    "No schedule": "沒有班次",
   },
 };
 
