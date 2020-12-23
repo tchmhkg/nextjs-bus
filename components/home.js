@@ -65,7 +65,7 @@ const Home = () => {
 
   const getRoutes = async (routeNumber) => {
     if(!busNumber && !routeNumber) return;
-    const number = routeNumber || busNumber;
+    const number = (routeNumber || busNumber).toString();
     setRoutes([]);
     setStops([]);
     const busRoutes = await kmb.getRoutes(number?.toUpperCase());
@@ -103,6 +103,7 @@ const Home = () => {
         <SearchInput
           onChange={setBusNumber} 
           value={busNumber}
+          // onClickButton={getRoutes}
           onClickSuggestion={onClickSuggestion}
           clickedSuggestion={clickedSuggestion}
         />

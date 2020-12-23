@@ -79,7 +79,8 @@ const SearchInput = (props) => {
         {props.value && <Clear onClick={clearInput}>{t('Clear')}</Clear>}
         {/* <button onClick={props.onClickButton}>{t('Submit')}</button> */}
       </InputWrapper>
-      <Suggestion onClickSuggestion={props.onClickSuggestion} input={props.value} clickedSuggestion={props.clickedSuggestion}/>
+      {props.value && <Suggestion onClickSuggestion={props.onClickSuggestion} input={props.value} clickedSuggestion={props.clickedSuggestion}/>
+}
     </Container>
   );
 };
