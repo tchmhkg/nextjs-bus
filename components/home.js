@@ -37,6 +37,7 @@ const Home = () => {
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [stops, setStops] = useState([]);
+  const [clickedSuggestion, setClickedSuggestion] = useState(false);
 
   useEffect(() => {
     if(localStorage && sessionStorage) {
@@ -56,11 +57,18 @@ const Home = () => {
     }
   }, [selectedRoute])
 
-  const getRoutes = async () => {
-    if(!busNumber) return;
+  const onClickSuggestion = async (route) => {
+    setClickedSuggestion(true);
+    setBusNumber(route);
+    getRoutes(route);
+  }
+
+  const getRoutes = async (routeNumber) => {
+    if(!busNumber && !routeNumber) return;
+    const number = routeNumber || busNumber;
     setRoutes([]);
     setStops([]);
-    const busRoutes = await kmb.getRoutes(busNumber?.toUpperCase());
+    const busRoutes = await kmb.getRoutes(number?.toUpperCase());
     if(busRoutes) {
       let results = [];
       for(let i = 0; i < busRoutes.length; i++) {
@@ -69,13 +77,14 @@ const Home = () => {
       } 
       setRoutes(results);
 
-      const isSelectedBefore = (selectedRoute?.route?.number === busNumber.toUpperCase()) ? results.find(route => {
+      const isSelectedBefore = (selectedRoute?.route?.number === number.toUpperCase()) ? results.find(route => {
         return (route.route.number === selectedRoute.route.number) && (route.route.bound === selectedRoute.route.bound);
       }) : false;
       if(isSelectedBefore) {
         getStopsFromRoute(isSelectedBefore);
       }
     }
+    setClickedSuggestion(false);
   }
 
   const getStopsFromRoute = async route => {
@@ -92,9 +101,10 @@ const Home = () => {
       </Header>
       <div>
         <SearchInput
-          onChange={(e) => setBusNumber(e.target.value?.toUpperCase())} 
+          onChange={setBusNumber} 
           value={busNumber}
-          onClickButton={getRoutes}
+          onClickSuggestion={onClickSuggestion}
+          clickedSuggestion={clickedSuggestion}
         />
         <Routes routes={routes} onClickRoute={setSelectedRoute}/>
         <Stops stops={stops} />

@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from "react";
 import styled from "styled-components";
 
 import useTranslation from "~/hooks/useTranslation";
+import Suggestion from "../kmb/suggestion";
 
 const Container = styled.div`
   position: sticky;
@@ -44,16 +45,25 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
+const Clear = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  font-size: 16px;
+`;
+
 const SearchInput = (props) => {
   const {t} = useTranslation();
   const searchTextInput = useRef(null);
 
   const handleChange = useCallback(
     (e) => {
-      props?.onChange(e);
+      props?.onChange(e.target.value?.toUpperCase());
     },
     [props?.onChange]
   , [props?.value]);
+
+  const clearInput = () => props?.onChange('');
 
   return (
     <Container>
@@ -66,9 +76,10 @@ const SearchInput = (props) => {
           placeholder={t(props.placeholder)}
           aria-labelledby={t(props.placeholder)}
         />
-        <button onClick={props.onClickButton}>{t('Submit')}</button>
+        {props.value && <Clear onClick={clearInput}>{t('Clear')}</Clear>}
+        {/* <button onClick={props.onClickButton}>{t('Submit')}</button> */}
       </InputWrapper>
-
+      <Suggestion onClickSuggestion={props.onClickSuggestion} input={props.value} clickedSuggestion={props.clickedSuggestion}/>
     </Container>
   );
 };
