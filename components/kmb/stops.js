@@ -19,6 +19,9 @@ const List = styled.ol`
   li {
     margin: 3px 0;
     cursor: pointer;
+    &:hover {
+      background-color: ${({theme})=>theme.backgroundAlt};
+    }
     .eta-item {
       cursor: default;
     }
