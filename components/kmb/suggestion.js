@@ -37,7 +37,7 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion, ..
   }, []);
 
   useEffect(() => {
-    if (input && !clickedSuggestion) {
+    if (input) {
       const filteredList = list.filter((route) => route.indexOf(input) > -1);
       // console.log('filter',filteredList);
       setFiltered(filteredList);
