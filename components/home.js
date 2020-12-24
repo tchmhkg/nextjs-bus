@@ -6,8 +6,10 @@ import useTranslation from '~/hooks/useTranslation';
 import { useStorage } from '~/hooks/useStorage';
 
 import Stops from '~/components/kmb/stops';
+import MobileStops from '~/components/kmb/mobile-stops';
 import Routes from '~/components/kmb/routes';
 import SearchInput from '~/components/common/input';
+import { useWindowSize } from '~/hooks/useWindowSize';
 
 const Heading = styled.h2`
   color: ${(props) => props.theme.text};
@@ -32,12 +34,14 @@ const Container = styled.div`
 const Home = () => {
   const { locale } = useTranslation();
   const {localStorage, sessionStorage} = useStorage();
+  const { width: windowWidth } = useWindowSize();
   const [kmb, setKmb] = useState(null);
   const [busNumber, setBusNumber] = useState('');
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [stops, setStops] = useState([]);
   const [clickedSuggestion, setClickedSuggestion] = useState(false);
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   useEffect(() => {
     if(localStorage && sessionStorage) {
@@ -92,6 +96,17 @@ const Home = () => {
     const stoppings = await route?.getStoppings();
     // console.log(stoppings);
     setStops(stoppings);
+    // if(windowWidth < 769) {
+    //   setShowBottomSheet(true);
+    // }
+  }
+
+  const onClickRoute = (route) => {
+    setSelectedRoute(route);
+    if(windowWidth < 769) {
+      setShowBottomSheet(true);
+    }
+
   }
 
   return (
@@ -107,8 +122,8 @@ const Home = () => {
           onClickSuggestion={onClickSuggestion}
           clickedSuggestion={clickedSuggestion}
         />
-        <Routes routes={routes} onClickRoute={setSelectedRoute}/>
-        <Stops stops={stops} />
+        <Routes routes={routes} onClickRoute={onClickRoute}/>
+        {windowWidth < 769 ? <MobileStops showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} stops={stops} /> : <Stops stops={stops} />}
       </div>
     </Container>
   );

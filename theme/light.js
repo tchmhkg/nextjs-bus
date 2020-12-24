@@ -19,6 +19,7 @@ const light = {
     inactiveMenu: '#FFFFFF',
     platformBackground: '#000000',
     platformText: '#FFFFFF',
+    modalBackground: '#FFFFFF',
   },
 };
 

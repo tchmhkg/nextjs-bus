@@ -21,6 +21,7 @@
     "nprogress": "^0.2.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-swipeable-bottom-sheet": "^1.1.2",
     "sass": "^1.29.0",
     "styled-components": "^5.2.1",
     "swr": "^0.3.9"

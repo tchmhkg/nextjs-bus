@@ -17,7 +17,7 @@ const Container = styled.div`
   }
 `;
 
-const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion, ...props }) => {
+const Suggestion = ({ input, onClickSuggestion = () => {}, ...props }) => {
   const [list, setList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
@@ -27,7 +27,7 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion, ..
       // console.log('rawData from sugg',rawData);
       if(rawData) {
         const dataArray = [...new Set(rawData.split(','))];
-        console.log(dataArray)
+        // console.log(dataArray)
         setList(dataArray);
       }
     };
