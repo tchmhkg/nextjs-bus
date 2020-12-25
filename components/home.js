@@ -65,6 +65,7 @@ const Home = () => {
     setClickedSuggestion(true);
     setBusNumber(route);
     getRoutes(route);
+    // setClickedSuggestion(false);
   }
 
   const getRoutes = async (routeNumber) => {
@@ -88,7 +89,6 @@ const Home = () => {
         getStopsFromRoute(isSelectedBefore);
       }
     }
-    setClickedSuggestion(false);
   }
 
   const getStopsFromRoute = async route => {
@@ -118,6 +118,7 @@ const Home = () => {
         <SearchInput
           onChange={setBusNumber} 
           value={busNumber}
+          onFocus={() => setClickedSuggestion(false)}
           // onClickButton={getRoutes}
           onClickSuggestion={onClickSuggestion}
           clickedSuggestion={clickedSuggestion}

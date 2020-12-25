@@ -17,7 +17,7 @@ const Container = styled.div`
   }
 `;
 
-const Suggestion = ({ input, onClickSuggestion = () => {}, ...props }) => {
+const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion = false, ...props }) => {
   const [list, setList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
@@ -31,7 +31,7 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, ...props }) => {
         setList(dataArray);
       }
     };
-    if (!list?.length) {
+    if (!list || !list?.length) {
       getDataFromStorage();
     }
   }, []);
@@ -49,6 +49,8 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, ...props }) => {
   const onClickItem = (route) => {
     onClickSuggestion(route);
   }
+
+  if(clickedSuggestion) return null;
 
   return (
     <Container>

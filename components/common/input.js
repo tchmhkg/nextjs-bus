@@ -72,6 +72,7 @@ const SearchInput = (props) => {
           autoCorrect="false"
           value={props?.value}
           onChange={handleChange}
+          onFocus={props.onFocus}
           ref={searchTextInput}
           placeholder={t(props.placeholder)}
           aria-labelledby={t(props.placeholder)}
@@ -79,8 +80,7 @@ const SearchInput = (props) => {
         {props.value && <Clear onClick={clearInput}>{t('Clear')}</Clear>}
         {/* <button onClick={props.onClickButton}>{t('Submit')}</button> */}
       </InputWrapper>
-      {(props.value && !props.clickedSuggestion) && <Suggestion onClickSuggestion={props.onClickSuggestion} input={props.value} />
-}
+      <Suggestion onClickSuggestion={props.onClickSuggestion} input={props.value} clickedSuggestion={props.clickedSuggestion} />
     </Container>
   );
 };

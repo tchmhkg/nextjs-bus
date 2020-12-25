@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import Layout from "~/components/layout";
 import Home from "~/components/home";
 
 const IndexPage = () => {
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getKmbRoutesList = async () => {
       try {
+        setLoading(true);
+        const busList = await window.localStorage.getItem("kmb_routes_list");
+
+        if(busList !== null) return setLoading(false);
+
         const res = await Axios.get('/api/bus/kmb-routes-list');
         if(res?.data?.data) {
           let rawData = res?.data?.data || ''
@@ -14,14 +20,16 @@ const IndexPage = () => {
           // console.log('rawData => ',rawData);
           window.localStorage.setItem('kmb_routes_list',rawData);
         }
+        setLoading(false);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     }
-    if (window.localStorage.getItem("kmb_routes_list") === null) {
-      getKmbRoutesList();
-    }
+    getKmbRoutesList();
   }, [])
+
+  if(loading) return null;
   return (
     <Layout home>
       <Home />

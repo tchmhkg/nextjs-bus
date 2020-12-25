@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 
 import Stop from './stop';
@@ -7,13 +7,14 @@ import Refresh from '~/components/refresh';
 import useTranslation from '~/hooks/useTranslation';
 import { useTheme } from '~/theme';
 
-const SubHeader = styled.div`
+const RefreshButton = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 25px;
+  background-color: ${({theme})=>theme.modalBackground};
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  h5 {
-    margin: 5px 0;
-  }
+  justify-content: flex-end;
 `;
 
 const BottomSheet = styled(SwipeableBottomSheet)``;
@@ -40,11 +41,10 @@ const SheetHeader = styled.div`
 
 const ListContainer = styled.div`
     padding: 10px 10px 0 10px;
-    top: 30px;
+    margin-top: 30px;
 `;
 
 const List = styled.ol`
-  ${'' /* height: 400px; */}
   overflow-y: auto;
   li {
     margin: 3px 0;
@@ -73,9 +73,14 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
 
   const onClickRefresh = () => setRefresh(true);
 
-  const toggleBottomSheet = () => {
-      setShowBottomSheet(prev => !prev);
-  }
+  useEffect(() => {
+    if(showBottomSheet) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.removeProperty('overflow');
+    }
+  }, [showBottomSheet])
+
   return (
     <BottomSheet
         style={bottomSheetStyle}
@@ -87,6 +92,7 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
         fullScreen
     >
         <SheetHeader><div className="handle" /></SheetHeader>
+        <RefreshButton><Refresh onClick={onClickRefresh} /></RefreshButton>
         <ListContainer>
             <List>
                 {stops?.map((stop) => {
@@ -103,25 +109,6 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
         </ListContainer>
     </BottomSheet>
   )
-//   return (
-//     <div>
-//       <SubHeader>
-//         <h5>Bus stops</h5>
-//         <Refresh onClick={onClickRefresh} />
-//       </SubHeader>
-//       <List>
-//         {stops?.map((stop) => {
-//           return (
-//             <Stop
-//               key={`${stop?.stop?.id}_${stop?.sequence}_${locale}`}
-//               stop={stop}
-//               setRefresh={setRefresh}
-//               refresh={refresh}
-//             />
-//           );
-//         })}
-//       </List>
-//     </div>
-//   );
 };
+
 export default React.memo(Stops);
