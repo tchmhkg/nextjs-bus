@@ -28,7 +28,7 @@ const List = styled.ol`
   max-height: 400px;
   overflow-y: auto;
   li {
-    margin: 3px 0;
+    margin: 5px 0;
     cursor: pointer;
     &:hover {
       background-color: ${({theme})=>theme.backgroundAlt};

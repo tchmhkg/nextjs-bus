@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useStorage } from '~/hooks/useStorage';
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.backgroundAlt};
@@ -21,23 +22,22 @@ const Container = styled.div`
 `;
 
 const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion = false, ...props }) => {
+  const {localStorage} = useStorage();
   const [list, setList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     const getDataFromStorage = async () => {
       const rawData = await window.localStorage.getItem('kmb_routes_list');
-      // console.log('rawData from sugg',rawData);
       if(rawData) {
         const dataArray = [...new Set(rawData.split(','))];
-        // console.log(dataArray)
         setList(dataArray);
       }
     };
-    if (!list || !list?.length) {
+    if(localStorage && (!list || !list?.length)) {
       getDataFromStorage();
     }
-  }, []);
+  }, [localStorage]);
 
   useEffect(() => {
     if (input) {

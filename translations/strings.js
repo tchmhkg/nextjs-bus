@@ -24,6 +24,7 @@ const strings = {
     "Scheduled NWFB": "Scheduled NWFB",
     "No schedule": "No schedule",
     "Clear": "Clear",
+    "Fare": "Fare",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -50,6 +51,7 @@ const strings = {
     "Scheduled NWFB": "預定班次 新巴",
     "No schedule": "沒有班次",
     "Clear": "清除",
+    "Fare": "車費",
   },
 };
 

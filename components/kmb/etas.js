@@ -6,7 +6,7 @@ import useTranslation from '~/hooks/useTranslation';
 
 const Container = styled.div`
   .eta-item {
-    margin-left: 10px;
+    margin-left: 15px;
     font-size: 16px;
   }
 `;

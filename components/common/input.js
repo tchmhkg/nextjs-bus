@@ -35,7 +35,6 @@ const Input = styled.input`
   padding: 10px;
   font-size: 18px;
   width: 100%;
-  ${'' /* background-color: ${props => props.theme.cardBackground}; */}
   background-color: transparent;
   transition: background-color 200ms linear;
   color: ${props => props.theme.text};

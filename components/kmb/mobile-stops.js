@@ -48,7 +48,7 @@ const ListContainer = styled.div`
 const List = styled.ol`
   overflow-y: auto;
   li {
-    margin: 3px 0;
+    margin: 5px 0;
     cursor: pointer;
     &:hover {
       background-color: ${({theme})=>theme.border};
