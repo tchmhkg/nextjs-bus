@@ -28,7 +28,7 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion = f
 
   useEffect(() => {
     const getDataFromStorage = async () => {
-      const rawData = await window.localStorage.getItem('kmb_routes_list');
+      const rawData = await localStorage.getItem('kmb_routes_list');
       if(rawData) {
         const dataArray = [...new Set(rawData.split(','))];
         setList(dataArray);
