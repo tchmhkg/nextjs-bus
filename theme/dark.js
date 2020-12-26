@@ -19,7 +19,8 @@ const dark = {
     inactiveMenu: '#FFFFFF',
     platformBackground: '#FFFFFF',
     platformText: '#000000',
-    modalBackground: '#2a3030',
+    modalBackground: '#232323',
+    cardBackground: '#232323',
   },
 };
 

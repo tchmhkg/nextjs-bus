@@ -5,27 +5,24 @@ import useTranslation from "~/hooks/useTranslation";
 import Suggestion from "../kmb/suggestion";
 
 const Container = styled.div`
-  position: sticky;
-  z-index: 10;
-  top: 70px;
-  left: 0;
-  padding: 0 15px;
-  margin: 0 -15px;
+  background-color: ${({theme})=>theme.cardBackground};
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 8px 0 rgba(0,0,0,0.2);
+  margin: 0 0 20px 0;
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  background-color: ${(props) => props.theme.background};
-  transition: background-color 200ms linear;
   position: relative;
-  height: 40px;
+  height: 50px;
   button {
       background-color: ${({theme})=>theme.toggleBackground};
       color: ${({theme})=>theme.inactiveMenu};
       width: 80px;
-      height: 40px;
+      height: 50px;
       appearance: none;
       border: none;
       font-size: 16px;
@@ -35,10 +32,11 @@ const InputWrapper = styled.div`
 `;
 
 const Input = styled.input`
-  padding: 5px;
-  font-size: 16px;
+  padding: 10px;
+  font-size: 18px;
   width: 100%;
-  background-color: ${props => props.theme.background};
+  ${'' /* background-color: ${props => props.theme.cardBackground}; */}
+  background-color: transparent;
   transition: background-color 200ms linear;
   color: ${props => props.theme.text};
   border: 1px solid ${props => props.theme.borderAlt};
@@ -48,7 +46,7 @@ const Input = styled.input`
 const Clear = styled.div`
   position: absolute;
   right: 10px;
-  top: 7px;
+  top: 12px;
   font-size: 16px;
 `;
 

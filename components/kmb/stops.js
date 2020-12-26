@@ -4,6 +4,17 @@ import Stop from './stop';
 import Refresh from '~/components/refresh';
 import useTranslation from '~/hooks/useTranslation';
 
+const Container = styled.div`
+  background-color: ${({theme})=>theme.cardBackground};
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 8px 0 rgba(0,0,0,0.2);
+  margin: 20px 0;
+  ol {
+    margin: 0;
+  }
+`;
+
 const SubHeader = styled.div`
   display: flex;
   align-items: center;
@@ -14,7 +25,7 @@ const SubHeader = styled.div`
 `;
 
 const List = styled.ol`
-  height: 400px;
+  max-height: 400px;
   overflow-y: auto;
   li {
     margin: 3px 0;
@@ -35,7 +46,7 @@ const Stops = ({ stops }) => {
   const onClickRefresh = () => setRefresh(true);
 
   return (
-    <div>
+    <Container>
       <SubHeader>
         <h5>Bus stops</h5>
         <Refresh onClick={onClickRefresh} />
@@ -52,7 +63,7 @@ const Stops = ({ stops }) => {
           );
         })}
       </List>
-    </div>
+    </Container>
   );
 };
 export default React.memo(Stops);

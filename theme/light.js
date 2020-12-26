@@ -20,6 +20,7 @@ const light = {
     platformBackground: '#000000',
     platformText: '#FFFFFF',
     modalBackground: '#FFFFFF',
+    cardBackground: '#FFFFFF',
   },
 };
 

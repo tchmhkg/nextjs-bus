@@ -5,12 +5,15 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.backgroundAlt};
   z-index: 10;
   position: absolute;
-  top: 40px;
+  top: 120px;
   max-height: 300px;
-  width: calc(100vw - 31px);
+  width: calc(100vw - 60px);
   overflow-y: auto;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   .suggestion-item {
     margin: 5px 0;
+    padding: 5px 10px;
     &:not(:last-child) {
       border-bottom: 1px solid ${({ theme }) => theme.borderAlt};
     }

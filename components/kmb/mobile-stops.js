@@ -9,12 +9,13 @@ import { useTheme } from '~/theme';
 
 const RefreshButton = styled.div`
   position: absolute;
-  right: 15px;
+  right: 0;
   top: 25px;
   background-color: ${({theme})=>theme.modalBackground};
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  padding: 0 15px 5px 15px;
 `;
 
 const BottomSheet = styled(SwipeableBottomSheet)``;
@@ -88,7 +89,7 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
         overflowHeight={0}
         open={showBottomSheet}
         onChange={setShowBottomSheet}
-        marginTop={180}
+        marginTop={200}
         fullScreen
     >
         <SheetHeader><div className="handle" /></SheetHeader>
