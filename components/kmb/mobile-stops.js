@@ -59,8 +59,8 @@ const List = styled.ol`
   }
 `;
 
-const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
-  const { locale } = useTranslation();
+const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
+  const { locale, t } = useTranslation();
   const { colors } = useTheme();
   const [refresh, setRefresh] = useState(false);
   const bottomSheetStyle = useMemo(() => ({
@@ -95,6 +95,7 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
         <SheetHeader><div className="handle" /></SheetHeader>
         <RefreshButton><Refresh onClick={onClickRefresh} /></RefreshButton>
         <ListContainer>
+        {!loading ? (
             <List>
                 {stops?.map((stop) => {
                 return (
@@ -107,6 +108,7 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
                 );
                 })}
             </List>
+        ): t('Loading...') }
         </ListContainer>
     </BottomSheet>
   )
