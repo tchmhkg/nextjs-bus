@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import React, { useEffect, useMemo, useState } from 'react';
-// import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 import { BottomSheet as SwipeableBottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 
@@ -21,11 +20,6 @@ const RefreshButton = styled.div`
 `;
 
 const BottomSheet = styled(SwipeableBottomSheet)`
-  ${'' /* .custom-bottom-sheet__body {
-    background-color: ${({theme})=>theme.modalBackground};
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-  }, */}
   color: ${({theme})=>theme.text};
   div[data-rsbs-overlay] {
     background-color: ${({theme})=>theme.modalBackground};
@@ -102,25 +96,15 @@ const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = (
 
   const dismissModel = () => setShowBottomSheet(false);
 
+  if(loading) return null;
   return (
     <BottomSheet
-        // style={bottomSheetStyle}
-        // bodyStyle={bottomSheetBodyStyle}
-        // overflowHeight={0}
         open={showBottomSheet}
         onDismiss={dismissModel}
         snapPoints={({ minHeight }) => minHeight - 200}
-        // onChange={setShowBottomSheet}
-        // marginTop={200}
-        // isFullScreen
-        // containerClassName="bottom-sheet"
-        // bodyClassName="bottom-sheet-body"
-        // swipeableViewsProps={{hysteresis: false}}
     >
-        {/* <SheetHeader><div className="handle" /></SheetHeader> */}
         <RefreshButton><Refresh onClick={onClickRefresh} /></RefreshButton>
         <ListContainer>
-        {!loading ? (
             <List>
                 {stops?.map((stop) => {
                 return (
@@ -133,7 +117,6 @@ const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = (
                 );
                 })}
             </List>
-        ): t('Loading...') }
         </ListContainer>
     </BottomSheet>
   )
