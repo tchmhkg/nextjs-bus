@@ -15,8 +15,13 @@ const RefreshButton = styled.div`
   background-color: ${({theme})=>theme.modalBackground};
   width: 100%;
   display: flex;
-  justify-content: flex-end;
-  padding: 0 15px 5px 15px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 15px 2px 15px;
+  z-index: 5;
+  h4 {
+    margin: 5px 0;
+  }
 `;
 
 const BottomSheet = styled(SwipeableBottomSheet)`
@@ -30,10 +35,15 @@ const BottomSheet = styled(SwipeableBottomSheet)`
   [data-rsbs-header]:before {
     background-color: ${({theme})=>theme.text};
   }
+  [data-rsbs-root] {
+    position: relative;
+  }
 `;
 
 const ListContainer = styled.div`
     padding: 0 10px 0 10px;
+    margin-top: 40px;
+    margin-bottom: 25px;
 `;
 
 const List = styled.ol`
@@ -41,27 +51,24 @@ const List = styled.ol`
   li {
     margin: 5px 0;
     cursor: pointer;
-    ${'' /* &:hover {
-      opacity: 0.9;
-    } */}
     .eta-item {
       cursor: default;
     }
   }
 `;
 
-const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
+const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = () => {}, routeDesc = null }) => {
   const { locale, t } = useTranslation();
   const { colors } = useTheme();
   const [refresh, setRefresh] = useState(false);
-  const bottomSheetStyle = useMemo(() => ({
-      zIndex: 200,
-  }), [colors]);
-  const bottomSheetBodyStyle = useMemo(() => ({
-    backgroundColor: colors.modalBackground,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15
-}), [colors]);
+//   const bottomSheetStyle = useMemo(() => ({
+//       zIndex: 200,
+//   }), [colors]);
+//   const bottomSheetBodyStyle = useMemo(() => ({
+//     backgroundColor: colors.modalBackground,
+//     borderTopLeftRadius: 15,
+//     borderTopRightRadius: 15
+// }), [colors]);
 
   const onClickRefresh = () => setRefresh(true);
 
@@ -79,9 +86,12 @@ const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = (
     <BottomSheet
         open={showBottomSheet}
         onDismiss={dismissModel}
-        snapPoints={({ maxHeight }) => maxHeight - 200}
+        snapPoints={({ maxHeight }) => maxHeight - 130}
     >
-        <RefreshButton><Refresh onClick={onClickRefresh} /></RefreshButton>
+        <RefreshButton>
+        <h4>{routeDesc}</h4>
+        <Refresh onClick={onClickRefresh} />
+        </RefreshButton>
         <ListContainer>
         {!loading ? (
             <List>

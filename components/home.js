@@ -44,6 +44,7 @@ const Home = () => {
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [loadingRoutes, setLoadingRoutes] = useState(false);
   const [loadingStops, setLoadingStops] = useState(false);
+  const [selectedRouteDesc, setSelectedRouteDesc] = useState(null);
 
   useEffect(() => {
     if(localStorage && sessionStorage) {
@@ -109,6 +110,7 @@ const Home = () => {
 
   const onClickRoute = (route) => {
     setSelectedRoute(route);
+    setSelectedRouteDesc(route?.route?.number + " - " + route?.getOriginDestinationString?.())
     if(windowWidth < 769) {
       setShowBottomSheet(true);
     }
@@ -130,7 +132,7 @@ const Home = () => {
           clickedSuggestion={clickedSuggestion}
         />
         <Routes loading={loadingRoutes} routes={routes} onClickRoute={onClickRoute}/>
-        {windowWidth < 769 ? <MobileStops loading={loadingStops} showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} stops={stops} /> : <Stops loading={loadingStops} stops={stops} />}
+        {windowWidth < 769 ? <MobileStops loading={loadingStops} showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} routeDesc={selectedRouteDesc} stops={stops} /> : <Stops loading={loadingStops} stops={stops} />}
       </div>
     </Container>
   );
