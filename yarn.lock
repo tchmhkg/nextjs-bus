@@ -839,7 +839,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@7.12.5", "@babel/runtime@^7.2.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
+"@babel/runtime@7.12.5", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
   version "7.12.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
   integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
@@ -967,6 +967,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@juggle/resize-observer@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.2.0.tgz#5e0b448d27fe3091bae6216456512c5904d05661"
+  integrity sha512-fsLxt0CHx2HCV9EL8lDoVkwHffsA0snUpddYjdLyXcG5E41xaamn9ZyQqOE9TUJdrRlH8/hjIf+UdOdDeKCUgg==
+
 "@next/bundle-analyzer@^10.0.2":
   version "10.0.3"
   resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-10.0.3.tgz#4eac34f171301581638deaa4dbb939632888c653"
@@ -1025,6 +1030,23 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
+
+"@reach/portal@^0.12.1":
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.12.1.tgz#995858a6e758d9446870937b60b8707a2efa11cb"
+  integrity sha512-Lhmtd2Qw1DzNZ2m0GHNzCu+2TYUf6kBREPSQJf44AP6kThRs02p1clntbJcmW/rrpYFYgFNbgf5Lso7NyW9ZXg==
+  dependencies:
+    "@reach/utils" "0.12.1"
+    tslib "^2.0.0"
+
+"@reach/utils@0.12.1":
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.12.1.tgz#02b9c15ba5cddf23e16f2d2ca77aef98a9702607"
+  integrity sha512-5uH4OgO+GupAzZuf3b6Wv/9uC6NdMBlxS6FSKD6YqSxP4QJ0vjD34RVon6N/RMRORacCLyD/aaZIA7283YgeOg==
+  dependencies:
+    "@types/warning" "^3.0.0"
+    tslib "^2.0.0"
+    warning "^4.0.3"
 
 "@rollup/plugin-node-resolve@^7.1.1":
   version "7.1.3"
@@ -1123,6 +1145,11 @@
   integrity sha512-7npvPKV+jINLu1SpSYVWG8KvyJBhBa8tmzMMdDoVc2pWUYHN8KIXlPJhjJ4LT97c4dXJA2SHL/q6ADbDriZN+Q==
   dependencies:
     source-map "^0.6.1"
+
+"@types/warning@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/warning/-/warning-3.0.0.tgz#0d2501268ad8f9962b740d387c4654f5f8e23e52"
+  integrity sha1-DSUBJorY+ZYrdA04fEZU9fjiPlI=
 
 "@types/webpack-sources@*":
   version "2.1.0"
@@ -1289,6 +1316,14 @@
     "@webassemblyjs/ast" "1.9.0"
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
+
+"@xstate/react@^1.2.0":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@xstate/react/-/react-1.2.2.tgz#54d32034d40384782ee11145bbbb31b841a5a464"
+  integrity sha512-pXcUtts6EaEUmquzpMZ2yhAZZLAFYxKVaaHnQ8MPWpGuby0B5QMch17Ij59+LGQACQTSE0nDqXrvvBQId6m8qQ==
+  dependencies:
+    use-isomorphic-layout-effect "^1.0.0"
+    use-subscription "^1.3.0"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -1717,6 +1752,11 @@ body-parser@1.19.0:
     qs "6.7.0"
     raw-body "2.4.0"
     type-is "~1.6.17"
+
+body-scroll-lock@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/body-scroll-lock/-/body-scroll-lock-3.1.5.tgz#c1392d9217ed2c3e237fee1e910f6cdd80b7aaec"
+  integrity sha512-Yi1Xaml0EvNA0OYWxXiYNqY24AfWkbA6w5vxE7GWxtKfzIbZM+Qw+aSmkgsbWzbHiy/RCSkUZBplVxTA+E4jJg==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3015,6 +3055,13 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
+
+focus-trap@^6.2.2:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.2.3.tgz#1f1443063f08241020d4ffb269bab9847ada97b7"
+  integrity sha512-87orNbj6UqKEDxmqDfYBDLBbqgxNIA5cXUBvHCt7dZ8/L0KTuzkjKoI0xXHU+5TyI9fImqfOJyvEkXYmZeClZA==
+  dependencies:
+    tabbable "^5.1.4"
 
 follow-redirects@^1.10.0:
   version "1.13.1"
@@ -4737,7 +4784,7 @@ promise-inflight@^1.0.1:
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
 
-prop-types@15.7.2, prop-types@^15.5.4, prop-types@^15.6.0:
+prop-types@15.7.2, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -4904,6 +4951,28 @@ react-refresh@0.8.3:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
+react-spring-bottom-sheet@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-spring-bottom-sheet/-/react-spring-bottom-sheet-3.1.1.tgz#7fe080148b80c9240662e047fc18bca63b86623c"
+  integrity sha512-ZyQ1NVswGhiUEyL/2yfv6ixv8EX7ngw8TTPcTKy/6WHN31hxJqtMNpKjFIYak1ZtlaCpp0juc6Gejl2tuy9tqQ==
+  dependencies:
+    "@juggle/resize-observer" "^3.2.0"
+    "@reach/portal" "^0.12.1"
+    "@xstate/react" "^1.2.0"
+    body-scroll-lock "^3.1.5"
+    focus-trap "^6.2.2"
+    react-spring "^8.0.27"
+    react-use-gesture "^8.0.1"
+    xstate "^4.15.1"
+
+react-spring@^8.0.27:
+  version "8.0.27"
+  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-8.0.27.tgz#97d4dee677f41e0b2adcb696f3839680a3aa356a"
+  integrity sha512-nDpWBe3ZVezukNRandTeLSPcwwTMjNVu1IDq9qA/AMiUqHuRN4BeSWvKr3eIxxg1vtiYiOLy4FqdfCP5IoP77g==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    prop-types "^15.5.8"
+
 react-swipeable-bottom-sheet@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/react-swipeable-bottom-sheet/-/react-swipeable-bottom-sheet-1.1.2.tgz#ab8c7d908e08bf2970cf6c76bb1afb9c5bf5158a"
@@ -4942,6 +5011,11 @@ react-swipeable-views@^0.14.0-alpha.0:
     react-swipeable-views-core "^0.14.0-alpha.0"
     react-swipeable-views-utils "^0.14.0-alpha.0"
     warning "^4.0.1"
+
+react-use-gesture@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-8.0.1.tgz#4360c0f7c9e26baf9fbe58f63fc9de7ef699c17f"
+  integrity sha512-CXzUNkulUdgouaAlvAsC5ZVo0fi9KGSBSk81WrE4kOIcJccpANe9zZkAYr5YZZhqpicIFxitsrGVS4wmoMun9A==
 
 react@17.0.1:
   version "17.0.1"
@@ -5755,6 +5829,11 @@ swr@^0.3.9:
   dependencies:
     dequal "2.0.2"
 
+tabbable@^5.1.4:
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.1.5.tgz#efec48ede268d511c261e3b81facbb4782a35147"
+  integrity sha512-oVAPrWgLLqrbvQE8XqcU7CVBq6SQbaIbHkhOca3u7/jzuQvyZycrUKPCGr04qpEIUslmUlULbSeN+m3QrKEykA==
+
 tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-1.1.3.tgz#a1fccc06b58db61fd7a45da2da44f5f3a3e67ba2"
@@ -5917,6 +5996,11 @@ tslib@^1.10.0, tslib@^1.9.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
+tslib@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
+
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
@@ -6064,7 +6148,12 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-subscription@1.5.1:
+use-isomorphic-layout-effect@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.1.tgz#7bb6589170cd2987a152042f9084f9effb75c225"
+  integrity sha512-L7Evj8FGcwo/wpbv/qvSfrkHFtOpCzvM5yl2KVyDJoylVuSvzphiiasmjgQPttIGBAy2WKiBNR98q8w7PiNgKQ==
+
+use-subscription@1.5.1, use-subscription@^1.3.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.5.1.tgz#73501107f02fad84c6dd57965beb0b75c68c42d1"
   integrity sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==
@@ -6110,7 +6199,7 @@ vm-browserify@1.1.2, vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-warning@^4.0.1:
+warning@^4.0.1, warning@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
   integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
@@ -6396,6 +6485,11 @@ ws@^6.0.0:
   integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   dependencies:
     async-limiter "~1.0.0"
+
+xstate@^4.15.1:
+  version "4.15.2"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.15.2.tgz#52213ecbca7b9458ff9162c977c4944ee16891c8"
+  integrity sha512-C+3jzJbhkp9ywGB+E2YMbS4mLyuxv366+KGi2RBX6y99xZFezbrGfaPQGRvFvn58OlLlCuSfCwn6bPcp78aMyw==
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"

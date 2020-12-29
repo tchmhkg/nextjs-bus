@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import React, { useEffect, useMemo, useState } from 'react';
-import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
+// import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
+import { BottomSheet as SwipeableBottomSheet } from 'react-spring-bottom-sheet'
+import 'react-spring-bottom-sheet/dist/style.css'
 
 import Stop from './stop';
 import Refresh from '~/components/refresh';
@@ -10,7 +12,7 @@ import { useTheme } from '~/theme';
 const RefreshButton = styled.div`
   position: absolute;
   right: 0;
-  top: 25px;
+  top: 15px;
   background-color: ${({theme})=>theme.modalBackground};
   width: 100%;
   display: flex;
@@ -18,7 +20,23 @@ const RefreshButton = styled.div`
   padding: 0 15px 5px 15px;
 `;
 
-const BottomSheet = styled(SwipeableBottomSheet)``;
+const BottomSheet = styled(SwipeableBottomSheet)`
+  ${'' /* .custom-bottom-sheet__body {
+    background-color: ${({theme})=>theme.modalBackground};
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }, */}
+  color: ${({theme})=>theme.text};
+  div[data-rsbs-overlay] {
+    background-color: ${({theme})=>theme.modalBackground};
+  }
+  [data-rsbs-overlay], [data-rsbs-backdrop], [data-rsbs-root]:after {
+    z-index: 200;
+  }
+  [data-rsbs-header]:before {
+    background-color: ${({theme})=>theme.text};
+  }
+`;
 
 const SheetHeader = styled.div`
     height: 30px;
@@ -41,8 +59,8 @@ const SheetHeader = styled.div`
 `;
 
 const ListContainer = styled.div`
-    padding: 10px 10px 0 10px;
-    margin-top: 30px;
+    padding: 0 10px 0 10px;
+    ${'' /* margin-top: 30px; */}
 `;
 
 const List = styled.ol`
@@ -82,17 +100,24 @@ const Stops = ({ stops, showBottomSheet, setShowBottomSheet = () => {} }) => {
     }
   }, [showBottomSheet])
 
+  const dismissModel = () => setShowBottomSheet(false);
+
   return (
     <BottomSheet
-        style={bottomSheetStyle}
-        bodyStyle={bottomSheetBodyStyle}
-        overflowHeight={0}
+        // style={bottomSheetStyle}
+        // bodyStyle={bottomSheetBodyStyle}
+        // overflowHeight={0}
         open={showBottomSheet}
-        onChange={setShowBottomSheet}
-        marginTop={200}
-        fullScreen
+        onDismiss={dismissModel}
+        snapPoints={({ minHeight }) => minHeight - 200}
+        // onChange={setShowBottomSheet}
+        // marginTop={200}
+        // isFullScreen
+        // containerClassName="bottom-sheet"
+        // bodyClassName="bottom-sheet-body"
+        // swipeableViewsProps={{hysteresis: false}}
     >
-        <SheetHeader><div className="handle" /></SheetHeader>
+        {/* <SheetHeader><div className="handle" /></SheetHeader> */}
         <RefreshButton><Refresh onClick={onClickRefresh} /></RefreshButton>
         <ListContainer>
             <List>
