@@ -32,29 +32,8 @@ const BottomSheet = styled(SwipeableBottomSheet)`
   }
 `;
 
-const SheetHeader = styled.div`
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: ${({theme})=>theme.modalBackground};
-    top: 0;
-    position: absolute;
-    width: 100%;
-    padding: 15px 0 15px 0;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    .handle {
-        width: 50px;
-        height: 5px;
-        border-radius: 5px;
-        background-color: ${({theme})=>theme.text};
-    }
-`;
-
 const ListContainer = styled.div`
     padding: 0 10px 0 10px;
-    ${'' /* margin-top: 30px; */}
 `;
 
 const List = styled.ol`
@@ -62,9 +41,9 @@ const List = styled.ol`
   li {
     margin: 5px 0;
     cursor: pointer;
-    &:hover {
-      background-color: ${({theme})=>theme.border};
-    }
+    ${'' /* &:hover {
+      opacity: 0.9;
+    } */}
     .eta-item {
       cursor: default;
     }
@@ -96,15 +75,15 @@ const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = (
 
   const dismissModel = () => setShowBottomSheet(false);
 
-  if(loading) return null;
   return (
     <BottomSheet
         open={showBottomSheet}
         onDismiss={dismissModel}
-        snapPoints={({ minHeight }) => minHeight - 200}
+        snapPoints={({ maxHeight }) => maxHeight - 200}
     >
         <RefreshButton><Refresh onClick={onClickRefresh} /></RefreshButton>
         <ListContainer>
+        {!loading ? (
             <List>
                 {stops?.map((stop) => {
                 return (
@@ -117,6 +96,7 @@ const Stops = ({ loading = false, stops, showBottomSheet, setShowBottomSheet = (
                 );
                 })}
             </List>
+        ): t('Loading...') }
         </ListContainer>
     </BottomSheet>
   )
