@@ -42,6 +42,8 @@ const Home = () => {
   const [stops, setStops] = useState([]);
   const [clickedSuggestion, setClickedSuggestion] = useState(false);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [loadingRoutes, setLoadingRoutes] = useState(false);
+  const [loadingStops, setLoadingStops] = useState(false);
 
   useEffect(() => {
     if(localStorage && sessionStorage) {
@@ -71,6 +73,7 @@ const Home = () => {
   const getRoutes = async (routeNumber) => {
     if(!busNumber && !routeNumber) return;
     const number = (routeNumber || busNumber).toString();
+    setLoadingRoutes(true);
     setRoutes([]);
     setStops([]);
     const busRoutes = await kmb.getRoutes(number?.toUpperCase());
@@ -89,13 +92,16 @@ const Home = () => {
         getStopsFromRoute(isSelectedBefore);
       }
     }
+    setLoadingRoutes(false);
   }
 
   const getStopsFromRoute = async route => {
+    setLoadingStops(true);
     setStops([]);
     const stoppings = await route?.getStoppings();
     // console.log(stoppings);
     setStops(stoppings);
+    setLoadingStops(false);
     // if(windowWidth < 769) {
     //   setShowBottomSheet(true);
     // }
@@ -123,8 +129,8 @@ const Home = () => {
           onClickSuggestion={onClickSuggestion}
           clickedSuggestion={clickedSuggestion}
         />
-        <Routes routes={routes} onClickRoute={onClickRoute}/>
-        {windowWidth < 769 ? <MobileStops showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} stops={stops} /> : <Stops stops={stops} />}
+        <Routes loading={loadingRoutes} routes={routes} onClickRoute={onClickRoute}/>
+        {windowWidth < 769 ? <MobileStops loading={loadingStops} showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} stops={stops} /> : <Stops loading={loadingStops} stops={stops} />}
       </div>
     </Container>
   );

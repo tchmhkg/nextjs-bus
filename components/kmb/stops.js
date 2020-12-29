@@ -39,8 +39,8 @@ const List = styled.ol`
   }
 `;
 
-const Stops = ({ stops }) => {
-  const { locale } = useTranslation();
+const Stops = ({ loading = false, stops }) => {
+  const { locale, t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
 
   const onClickRefresh = () => setRefresh(true);
@@ -51,6 +51,7 @@ const Stops = ({ stops }) => {
         <h5>Bus stops</h5>
         <Refresh onClick={onClickRefresh} />
       </SubHeader>
+      {!loading ? (
       <List>
         {stops?.map((stop) => {
           return (
@@ -63,6 +64,7 @@ const Stops = ({ stops }) => {
           );
         })}
       </List>
+      ) : t('Loading...') }
     </Container>
   );
 };

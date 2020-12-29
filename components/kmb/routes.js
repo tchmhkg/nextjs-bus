@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Route from '~/components/kmb/route';
+import useTranslation from '~/hooks/useTranslation';
 
 const Container = styled.div`
   background-color: ${({theme})=>theme.cardBackground};
@@ -16,10 +17,12 @@ const Container = styled.div`
   }
 `;
 
-const Routes = ({ routes, onClickRoute = () => {} }) => {
+const Routes = ({ loading = false, routes, onClickRoute = () => {} }) => {
+  const {t} = useTranslation();
   return (
     <Container>
       <h5>Routes</h5>
+      {!loading ? (
       <ol>
         {routes?.map((route) => (
           <Route
@@ -29,6 +32,7 @@ const Routes = ({ routes, onClickRoute = () => {} }) => {
           />
         ))}
       </ol>
+      ): t('Loading...')}
     </Container>
   );
 };
