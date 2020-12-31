@@ -25,6 +25,7 @@ const strings = {
     "No schedule": "No schedule",
     "Clear": "Clear",
     "Fare": "Fare",
+    "Bookmark": "Bookmark",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -35,7 +36,7 @@ const strings = {
     " Scheduled": "預定班次",
     "Slow moving": "行車緩慢",
     "From": "由",
-    "To": "到",
+    "To": "往",
     "Last Bus": "尾班車",
     "Search": "搜尋",
     "Submit": "提交",
@@ -52,6 +53,7 @@ const strings = {
     "No schedule": "沒有班次",
     "Clear": "清除",
     "Fare": "車費",
+    "Bookmark": "收藏",
   },
 };
 

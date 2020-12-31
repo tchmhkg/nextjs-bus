@@ -12,26 +12,25 @@ const Container = styled.div`
   h5 {
     margin: 0 0 5px 0;
   }
-  ol {
-    margin: 0;
+  span {
+    font-size: 12px;
   }
 `;
 
 const Routes = ({ loading = false, routes, onClickRoute = () => {} }) => {
   const {t} = useTranslation();
+  // console.log(routes);
   return (
     <Container>
       <h5>Routes</h5>
       {!loading ? (
-      <ol>
-        {routes?.map((route) => (
+        routes?.map((route) => (
           <Route
             key={`${route?.route?.number}_${route?.route?.bound}`}
             onClick={onClickRoute}
             route={route}
           />
-        ))}
-      </ol>
+        ))
       ): t('Loading...')}
     </Container>
   );

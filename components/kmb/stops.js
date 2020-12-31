@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
-import Stop from './stop';
 import Refresh from '~/components/refresh';
 import useTranslation from '~/hooks/useTranslation';
+const Stop = dynamic(import('~/components/kmb/stop'));
 
 const Container = styled.div`
   background-color: ${({theme})=>theme.cardBackground};
@@ -30,6 +30,7 @@ const List = styled.ol`
   li {
     margin: 5px 0;
     cursor: pointer;
+    position: relative;
     &:hover {
       background-color: ${({theme})=>theme.backgroundAlt};
     }

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Kmb from 'js-kmb-api';
+import dynamic from 'next/dynamic';
 
 import useTranslation from '~/hooks/useTranslation';
 import { useStorage } from '~/hooks/useStorage';
 
-import Stops from '~/components/kmb/stops';
-import MobileStops from '~/components/kmb/mobile-stops';
-import Routes from '~/components/kmb/routes';
 import SearchInput from '~/components/common/input';
 import { useWindowSize } from '~/hooks/useWindowSize';
+
+const Routes = dynamic(import('~/components/kmb/routes'));
+const MobileStops = dynamic(import('~/components/kmb/mobile-stops'));
+const Stops = dynamic(import('~/components/kmb/stops'));
 
 const Heading = styled.h2`
   color: ${(props) => props.theme.text};

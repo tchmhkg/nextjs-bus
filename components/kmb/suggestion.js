@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useStorage } from '~/hooks/useStorage';
 
@@ -49,9 +49,9 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion = f
     }
   }, [input]);
 
-  const onClickItem = (route) => {
+  const onClickItem = useCallback((route) => {
     onClickSuggestion(route);
-  }
+  }, [])
 
   if(clickedSuggestion) return null;
 

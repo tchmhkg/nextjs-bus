@@ -1,10 +1,12 @@
 import React from 'react';
+import useTranslation from '~/hooks/useTranslation';
 
 const Route = ({route, onClick = () => {}}) => {
+  const { t } = useTranslation();
   return (
-    <li onClick={() => onClick(route)}>
-        <div>{route?.getOriginDestinationString?.()}</div>
-    </li>
+    <div onClick={() => onClick(route)}>
+        <div><span>{t('To')}</span> {route?.destination}</div>
+    </div>
   );
 };
 export default React.memo(Route);
