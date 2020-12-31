@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Kmb from 'js-kmb-api';
 import dynamic from 'next/dynamic';
-
-import useTranslation from '~/hooks/useTranslation';
-import { useStorage } from '~/hooks/useStorage';
-
 import SearchInput from '~/components/common/input';
 import { useWindowSize } from '~/hooks/useWindowSize';
+import { useKmb } from '~/hooks/useKmb';
 
 const Routes = dynamic(import('~/components/kmb/routes'));
 const MobileStops = dynamic(import('~/components/kmb/mobile-stops'));
@@ -34,10 +30,8 @@ const Container = styled.div`
 `;
 
 const Home = () => {
-  const { locale } = useTranslation();
-  const {localStorage, sessionStorage} = useStorage();
   const { width: windowWidth } = useWindowSize();
-  const [kmb, setKmb] = useState(new Kmb(locale === 'zh' ? 'zh-hant' : 'en', localStorage, sessionStorage));
+  const kmb = useKmb();
   const [busNumber, setBusNumber] = useState('');
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
@@ -47,12 +41,6 @@ const Home = () => {
   const [loadingRoutes, setLoadingRoutes] = useState(false);
   const [loadingStops, setLoadingStops] = useState(false);
   const [selectedRouteDesc, setSelectedRouteDesc] = useState(null);
-
-  useEffect(() => {
-    if(localStorage && sessionStorage) {
-      setKmb(new Kmb(locale === 'zh' ? 'zh-hant' : 'en', localStorage, sessionStorage))
-    }
-  }, [localStorage, sessionStorage, locale]);
 
   useEffect(() => {
     if(busNumber) {
