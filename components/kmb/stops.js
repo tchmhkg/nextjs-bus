@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Refresh from '~/components/refresh';
 import useTranslation from '~/hooks/useTranslation';
 const Stop = dynamic(import('~/components/kmb/stop'));
