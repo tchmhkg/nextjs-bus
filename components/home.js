@@ -37,7 +37,7 @@ const Home = () => {
   const { locale } = useTranslation();
   const {localStorage, sessionStorage} = useStorage();
   const { width: windowWidth } = useWindowSize();
-  const [kmb, setKmb] = useState(null);
+  const [kmb, setKmb] = useState(new Kmb(locale === 'zh' ? 'zh-hant' : 'en', localStorage, sessionStorage));
   const [busNumber, setBusNumber] = useState('');
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
@@ -79,7 +79,7 @@ const Home = () => {
     setLoadingRoutes(true);
     setRoutes([]);
     setStops([]);
-    const busRoutes = await kmb.getRoutes(number?.toUpperCase());
+    const busRoutes = await kmb?.getRoutes(number?.toUpperCase());
     if(busRoutes) {
       let results = [];
       for(let i = 0; i < busRoutes.length; i++) {

@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useStorage() {
-  const [_localStorage, setLocalStorage] = useState(null);
-  const [_sessionStorage, setSessionStorage] = useState(null);
+  const ref = useRef({});
   useEffect(() => {
-    setLocalStorage(window.localStorage);
-    setSessionStorage(window.sessionStorage);
+    ref.current = {localStorage: window.localStorage, sessionStorage: window.sessionStorage};
   });
-  return {localStorage: _localStorage, sessionStorage: _sessionStorage};
+  return ref.current;
 }

@@ -1,7 +1,8 @@
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import Layout from "~/components/layout";
-import Home from "~/components/home";
 import { BUS_ROUTES } from '~/utils/bus-routes';
+const Home = dynamic(import('~/components/home'), {ssr: false});
 
 const IndexPage = () => {
   const [loading, setLoading] = useState(false);
