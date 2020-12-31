@@ -38,12 +38,12 @@ const BottomSheet = styled(SwipeableBottomSheet)`
 
 const ListContainer = styled.div`
   padding: 0 10px 0 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 `;
 
 const List = styled.ol`
   overflow-y: auto;
-  margin: 0;
+  margin: 5px 0 0 0;
   li {
     margin: 5px 0;
     cursor: pointer;

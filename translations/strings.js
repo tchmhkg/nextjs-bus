@@ -26,6 +26,7 @@ const strings = {
     "Clear": "Clear",
     "Fare": "Fare",
     "Bookmark": "Bookmark",
+    "It's empty here.": "It's empty here.",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -54,6 +55,7 @@ const strings = {
     "Clear": "清除",
     "Fare": "車費",
     "Bookmark": "收藏",
+    "It's empty here.": "你的列表為空",
   },
 };
 

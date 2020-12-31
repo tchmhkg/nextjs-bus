@@ -5,7 +5,7 @@ import useTranslation from '~/hooks/useTranslation';
 
 const Container = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: env(safe-area-inset-bottom);
   width: 100vw;
   display: flex;
   align-items: center;

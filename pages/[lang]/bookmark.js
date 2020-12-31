@@ -1,33 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import Layout from "~/components/layout";
-import BookmarkList from "~/components/bookmark-list";
+import React, { useCallback, useEffect, useState } from 'react';
+import Layout from '~/components/layout';
+import BookmarkList from '~/components/bookmark-list';
+import styled from 'styled-components';
+import useTranslation from '~/hooks/useTranslation';
+import Refresh from '~/components/refresh';
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const Heading = styled.h2`
+  color: ${(props) => props.theme.text};
+  margin: 0 0 5px 0;
+`;
 
 const BookmarkPage = () => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [list, setList] = useState([]);
   useEffect(() => {
-    const getBookmarks = async () => {
-      try {
-        setLoading(true);
-        const existing = await window.localStorage.getItem('stops');
-  
-        const existingJson = existing ? JSON.parse(existing) : [];
-        setList(existingJson);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
+    getBookmarks();
+  }, []);
+
+  useEffect(() => {
+    if (refresh) {
+      getBookmarks();
+    }
+  }, [refresh]);
+
+  const getBookmarks = async () => {
+    try {
+      setLoading(true);
+      const existing = await window.localStorage.getItem('stops');
+      const existingJson = existing ? JSON.parse(existing) : [];
+
+      setList(existingJson);
+      setLoading(false);
+      if (refresh) {
+        setRefresh(false);
+      }
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      if (refresh) {
+        setRefresh(false);
       }
     }
-    getBookmarks();
-  }, [])
+  };
 
-  if(loading) return null;
+  const onClickRefresh = useCallback(() => setRefresh(true), []);
+
   return (
     <Layout>
-      <BookmarkList list={list}/>
+      <Header>
+        <Heading>{t('Bookmark')}</Heading>
+        <Refresh onClick={onClickRefresh} />
+      </Header>
+      {list?.length ? (
+        <BookmarkList list={list} />
+      ) : (
+        t("It's empty here.")
+      )}
     </Layout>
   );
 };
 export default BookmarkPage;
-
