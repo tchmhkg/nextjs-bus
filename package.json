@@ -12,7 +12,7 @@
     "axios": "^0.21.0",
     "date-fns": "^2.16.1",
     "framer-motion": "^2.9.5",
-    "js-kmb-api": "tchmhkg/js-kmb-api",
+    "kmb-api": "tchmhkg/kmb-api",
     "lodash": "^4.17.20",
     "next": "10.0.3",
     "next-compose-plugins": "^2.2.1",

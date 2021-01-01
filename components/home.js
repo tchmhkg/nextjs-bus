@@ -42,11 +42,11 @@ const Home = () => {
   const [loadingStops, setLoadingStops] = useState(false);
   const [selectedRouteDesc, setSelectedRouteDesc] = useState(null);
 
-  useEffect(() => {
-    if(busNumber) {
-      getRoutes();
-    }
-  }, [kmb]);
+  // useEffect(() => {
+  //   if(busNumber) {
+  //     getRoutes();
+  //   }
+  // }, [kmb]);
 
   useEffect(() => {
     if(selectedRoute) {

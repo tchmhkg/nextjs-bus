@@ -3568,16 +3568,6 @@ jest-worker@24.9.0, jest-worker@^24.9.0:
     merge-stream "^2.0.0"
     supports-color "^6.1.0"
 
-js-kmb-api@../js-kmb-api:
-  version "3.2.4"
-  dependencies:
-    aes-js "^3.1.2"
-    array-flat-polyfill "^1.0.1"
-    axios "^0.21.0"
-    hkscs_converter "^0.2.0"
-    node-storage-shim "^2.0.1"
-    ssl-root-cas "^1.3.1"
-
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -3652,6 +3642,17 @@ klona@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
+
+kmb-api@tchmhkg/kmb-api:
+  version "3.2.4"
+  resolved "https://codeload.github.com/tchmhkg/kmb-api/tar.gz/ce704b7564554882ca7f3d52499bef24495ce297"
+  dependencies:
+    aes-js "^3.1.2"
+    array-flat-polyfill "^1.0.1"
+    axios "^0.21.0"
+    hkscs_converter "^0.2.0"
+    node-storage-shim "^2.0.1"
+    ssl-root-cas "^1.3.1"
 
 line-column@^1.0.2:
   version "1.0.2"

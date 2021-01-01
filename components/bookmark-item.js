@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Axios from 'axios';
 import { format } from 'date-fns';
 import useTranslation from '~/hooks/useTranslation';
+import { getStringByLocale } from '~/utils';
 
 const Container = styled.div`
   padding: 5px 15px;
@@ -37,13 +38,13 @@ const RouteDetail = styled.div`
 `;
 
 const BookmarkItem = ({ item = {} }) => {
-    const {t} = useTranslation();
+    const {t, locale} = useTranslation();
   return (
     <Container>
         <BusNumber>{item?.variant?.route?.number}</BusNumber>
         <RouteDetail>
-            <div><span>{t('To')}</span> {item?.variant?.destination}</div>
-            <div className="stop-name">{item?.stop?.name}</div>
+            <div><span>{t('To')}</span> {getStringByLocale(item?.variant, 'destination', locale)}</div>
+            <div className="stop-name">{getStringByLocale(item.stop, 'name', locale)}</div>
         </RouteDetail>
         <Eta stop={item}/>
     </Container>

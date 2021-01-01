@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import useTranslation from '~/hooks/useTranslation';
+import { getStringByLocale } from '~/utils';
 const Bookmark = dynamic(import('~/components/kmb/bookmark'));
 const Etas = dynamic(import('~/components/kmb/etas'));
 
@@ -18,7 +19,7 @@ const BookmarkButton = styled(Bookmark)`
 
 const Stop = ({ stop = {}, setRefresh = () => {}, refresh = false }) => {
   const [open, setOpen] = useState(false);
-  const {t} = useTranslation();
+  const {t, locale} = useTranslation();
   const toggle = () => setOpen((prev) => !prev);
 
   const fare = useMemo(() => `${t('Fare')}: $${stop.fare?.toFixed(1)}`, [stop?.fare, t]);
@@ -26,7 +27,8 @@ const Stop = ({ stop = {}, setRefresh = () => {}, refresh = false }) => {
     id: `${stop.variant.route.number}_${stop.stop.id}_${stop.variant.route.bound}`,
     stop: {
       ...stop.stop,
-      name: stop.stop.name
+      nameZh: stop.stop.nameZh,
+      nameEn: stop.stop.nameEn,
     }
   };
   // console.log(stop);
@@ -34,7 +36,7 @@ const Stop = ({ stop = {}, setRefresh = () => {}, refresh = false }) => {
   return (
     <li>
       <BookmarkButton stop={stop} />
-      <div className="stop-detail" onClick={toggle}>{stop?.stop?.name}{stop.fare > 0 && <Fare>{fare}</Fare>}</div>
+      <div className="stop-detail" onClick={toggle}>{getStringByLocale(stop.stop, 'name', locale)}{stop.fare > 0 && <Fare>{fare}</Fare>}</div>
       {open && (
         <Etas setRefresh={setRefresh} refresh={refresh} stopping={stop} />
       )}

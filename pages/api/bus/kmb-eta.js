@@ -1,4 +1,4 @@
-import Kmb from 'js-kmb-api';
+import Kmb from 'kmb-api';
 
 const kmb = new Kmb();
 
