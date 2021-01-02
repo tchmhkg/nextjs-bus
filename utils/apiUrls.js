@@ -1,0 +1,1 @@
+export const getAllStops = 'https://search.kmb.hk/kmbwebsite/Function/FunctionRequest.ashx?action=getallstops'

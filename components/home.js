@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import SearchInput from '~/components/common/input';
 import { useWindowSize } from '~/hooks/useWindowSize';
 import { useKmb } from '~/hooks/useKmb';
+import useTranslation from '~/hooks/useTranslation';
+import { getStringByLocale } from '~/utils';
 
 const Routes = dynamic(import('~/components/kmb/routes'));
 const MobileStops = dynamic(import('~/components/kmb/mobile-stops'));
@@ -30,6 +32,7 @@ const Container = styled.div`
 `;
 
 const Home = () => {
+  const {locale} = useTranslation();
   const { width: windowWidth } = useWindowSize();
   const kmb = useKmb();
   const [busNumber, setBusNumber] = useState('');
@@ -100,7 +103,8 @@ const Home = () => {
 
   const onClickRoute = (route) => {
     setSelectedRoute(route);
-    setSelectedRouteDesc(route?.route?.number + " - " + route?.getOriginDestinationString?.())
+    const oriDestString = `${getStringByLocale(route, 'origin', locale)} ${String.fromCodePoint(0x2192)} ${getStringByLocale(route, 'destination', locale)}`
+    setSelectedRouteDesc(route?.route?.number + " - " + oriDestString)
     if(windowWidth < 769) {
       setShowBottomSheet(true);
     }
