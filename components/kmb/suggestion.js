@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useStorage } from '~/hooks/useStorage';
+import { BUS_ROUTES } from '~/utils/bus-routes';
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.backgroundAlt};
@@ -28,7 +29,7 @@ const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion = f
 
   useEffect(() => {
     const getDataFromStorage = async () => {
-      const rawData = await localStorage.getItem('kmb_routes_list');
+      const rawData = BUS_ROUTES;//await localStorage.getItem('kmb_routes_list');
       if(rawData) {
         const dataArray = [...new Set(rawData.split(','))];
         setList(dataArray);

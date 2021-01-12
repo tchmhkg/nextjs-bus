@@ -6,22 +6,22 @@ const Home = dynamic(import('~/components/home'), {ssr: false});
 
 const IndexPage = () => {
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const getKmbRoutesList = async () => {
-      try {
-        setLoading(true);
-        const busList = await window.localStorage.getItem("kmb_routes_list");
+  // useEffect(() => {
+  //   const getKmbRoutesList = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const busList = await window.localStorage.getItem("kmb_routes_list");
 
-        if(busList !== null) return setLoading(false);
-        window.localStorage.setItem('kmb_routes_list',BUS_ROUTES);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-      }
-    }
-    getKmbRoutesList();
-  }, [])
+  //       if(busList !== null) return setLoading(false);
+  //       window.localStorage.setItem('kmb_routes_list',BUS_ROUTES);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.log(err);
+  //       setLoading(false);
+  //     }
+  //   }
+  //   getKmbRoutesList();
+  // }, [])
 
   if(loading) return null;
   return (

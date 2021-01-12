@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 // var DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 // const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = withPlugins(
@@ -57,20 +57,9 @@ module.exports = withPlugins(
             'node_modules',
             'strip-ansi',
           )
-          config.resolve.alias['highcharts$'] = path.resolve(
-            __dirname,
-            'node_modules',
-            'highcharts/highstock.js',
-          )
           return config
         },
         env: {
-            FINNHUB_API_KEY: process.env.FINNHUB_API_KEY,
-            TDA_CLIENT_ID: process.env.TDA_CLIENT_ID,
-            TIINGO_API_KEY: process.env.TIINGO_API_KEY
-        },
-        images: {
-          domains: ['static.finnhub.io'],
         },
     }
 );
