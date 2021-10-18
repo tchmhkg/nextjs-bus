@@ -50,7 +50,7 @@ const Stops = ({ loading = false, stops }) => {
   return (
     <Container>
       <SubHeader>
-        <h5>Bus stops</h5>
+        <h5>{t('Bus stops')}</h5>
         <Refresh onClick={onClickRefresh} />
       </SubHeader>
       {!loading ? (

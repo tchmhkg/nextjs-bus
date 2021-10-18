@@ -2,7 +2,7 @@ const light = {
   theme: {
     background: '#ffffff',
     border: '#dfdfdf',
-    backgroundAlt: '#dbdbdb',
+    backgroundAlt: '#f2f2f2',
     borderAlt: '#bdbdbd',
     text: '#171717',
     buttonText: '#ebffff',
@@ -21,6 +21,9 @@ const light = {
     platformText: '#FFFFFF',
     modalBackground: '#FFFFFF',
     cardBackground: '#FFFFFF',
+    kmbRed: '#E60002',
+    white: '#FFFFFF',
+    black: '#000000',
   },
 };
 

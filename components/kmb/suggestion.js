@@ -7,7 +7,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.backgroundAlt};
   z-index: 10;
   position: absolute;
-  top: 120px;
+  top: 80px;
   max-height: 300px;
   width: calc(100vw - 60px);
   overflow-y: auto;

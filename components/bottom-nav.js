@@ -5,18 +5,29 @@ import useTranslation from '~/hooks/useTranslation';
 
 const Container = styled.div`
   position: fixed;
-  bottom: env(safe-area-inset-bottom);
+  bottom: calc(env(safe-area-inset-bottom) + 25px);
+  ${'' /* margin-bottom: env(safe-area-inset-bottom); */}
   width: 100vw;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   height: 50px;
-  background-color: ${({ theme }) => theme.backgroundAlt};
-  ${'' /* transition: background-color 200ms linear; */}
-  color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.background};
   @media (min-width: 768px) {
     height: 60px;
   }
+`;
+
+const Wrapper = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px;
+  border-radius: 50px;
+  background-color: ${({ theme }) => theme.backgroundAlt};
+  box-shadow: 2px 2px 8px 0 rgba(0,0,0,0.2);
+  color: ${({ theme }) => theme.text};
 `;
 
 const NavItem = styled.div`
@@ -29,8 +40,18 @@ const NavItem = styled.div`
     selected ? theme.background : 'transparent'};
   height: 50px;
   cursor: pointer;
+  position: relative;
   &:not(:last-child) {
-    border-right: 1px solid;
+    &::after {
+      content: "";
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 25px;
+      background: ${({ theme }) => theme.text};
+      position: absolute;
+    }
   }
   @media (min-width: 768px) {
     height: 60px;
@@ -55,8 +76,10 @@ const Item = ({ label, link }) => {
 const BottomNav = () => {
   return (
     <Container>
+    <Wrapper>
       <Item label="KMB" link="" />
       <Item label="Bookmark" link="bookmark" />
+      </Wrapper>
     </Container>
   );
 };

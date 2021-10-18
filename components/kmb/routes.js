@@ -22,7 +22,7 @@ const Routes = ({ loading = false, routes, onClickRoute = () => {} }) => {
   // console.log(routes);
   return (
     <Container>
-      <h5>Routes</h5>
+      <h5>{t('Routes')}</h5>
       {!loading ? (
         routes?.map((route) => (
           <Route

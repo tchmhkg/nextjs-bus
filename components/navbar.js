@@ -15,11 +15,11 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-end;
   height: 70px;
-  background-color: ${props => props.theme.background};
-  -webkit-transition: background-color 200ms linear;
-  -ms-transition: background-color 200ms linear;
-  transition: background-color 200ms linear;
+  background-color: ${props => props.theme.kmbRed};
   z-index: ${({shouldUpdateZIndex}) => shouldUpdateZIndex ? 20 : 15};
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 2px 2px 8px 0 rgba(0,0,0,0.2);
   @media (min-width: 768px) {
     padding-right: 15px;
   }

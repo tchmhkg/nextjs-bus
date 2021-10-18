@@ -1,13 +1,21 @@
-import Axios from 'axios';
+import axios from 'axios';
 
 export default async function handler(req, res) {
   try {
-    const apiRes = await Axios.get('http://etadatafeed.kmb.hk:1933/GetData.ashx?type=ETA_R');
-
-    res.json({
-      success: true,
-      data: apiRes?.data?.[0]?.r_no || [],
-    });
+    const apiRes = await axios.get('https://data.etabus.gov.hk/v1/transport/kmb/route/');
+    if(apiRes?.data) {
+      const routes = apiRes?.data?.data?.map(item => item.route);
+      res.json({
+        success: true,
+        data: [...new Set(routes)]
+      })
+    }
+    else {
+      res.json({
+        success: false,
+        data: [],
+      });
+    }
   } catch (error) {
     console.log(error);
     res.json({

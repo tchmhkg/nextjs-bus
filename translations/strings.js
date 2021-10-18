@@ -27,6 +27,8 @@ const strings = {
     "Fare": "Fare",
     "Bookmark": "Bookmark",
     "It's empty here.": "It's empty here.",
+    "Routes": "Routes",
+    "Bus stops": "Bus stops",
   },
   zh: {
     "Back to home": "回到首頁",
@@ -56,6 +58,8 @@ const strings = {
     "Fare": "車費",
     "Bookmark": "收藏",
     "It's empty here.": "你的列表為空",
+    "Routes": "路線",
+    "Bus stops": "巴士站",
   },
 };
 

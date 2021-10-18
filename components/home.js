@@ -113,9 +113,9 @@ const Home = () => {
 
   return (
     <Container>
-      <Header>
+      {/* <Header>
         <Heading>Next Bus</Heading>
-      </Header>
+      </Header> */}
       <div>
         <SearchInput
           onChange={setBusNumber} 

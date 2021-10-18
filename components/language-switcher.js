@@ -11,8 +11,8 @@ const Wrapper = styled.div`
 
 const LocaleButton = styled.div`
   cursor: pointer;
-  color: ${(props) =>
-    props.selected ? '#ffffff' : props.theme.text};
+  color: ${({selected, theme}) =>
+    selected ? theme.black : theme.white};
   display: flex;
   justify-content: center;
   margin: 0 5px;
@@ -20,11 +20,7 @@ const LocaleButton = styled.div`
   padding: 5px 10px;
   font-size: 18px;
   background: ${({selected, theme}) =>
-    selected ? theme.primary1 : 'transparent'};
-  background: ${({selected, theme}) =>
-    selected ? `-webkit-linear-gradient(to right, ${theme.primary2}, ${theme.primary1})` : 'transparent'};
-  background: ${({selected, theme}) =>
-    selected ? `linear-gradient(to right, ${theme.primary2}, ${theme.primary1})` : 'transparent'};
+    selected ? theme.white : 'transparent'};
   @media (max-width: 374px) {
     font-size: 16px;
   }

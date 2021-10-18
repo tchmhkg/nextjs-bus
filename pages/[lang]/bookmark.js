@@ -9,6 +9,13 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: ${({theme}) => theme.background};
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 15px 10px 15px;
+  height: 50px;
 `;
 const Heading = styled.h2`
   color: ${(props) => props.theme.text};

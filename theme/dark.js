@@ -21,6 +21,9 @@ const dark = {
     platformText: '#000000',
     modalBackground: '#232323',
     cardBackground: '#232323',
+    kmbRed: '#E60002',
+    white: '#FFFFFF',
+    black: '#000000',
   },
 };
 

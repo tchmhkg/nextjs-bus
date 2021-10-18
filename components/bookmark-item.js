@@ -78,7 +78,7 @@ const Eta = ({stop}) => {
 
     return (
         <div className="eta-item">
-          {(!loading && time?.time) && format(new Date(time.time), 'HH:mm')}
+          {(!loading && time?.time) ? format(new Date(time.time), 'HH:mm') : '-'}
         </div>
       );
 }
