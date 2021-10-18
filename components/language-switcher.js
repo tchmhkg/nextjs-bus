@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { locales, languageNames } from "~/translations/config";
-import { LanguageContext } from "~/context/LanguageContext";
+import { LanguageContext } from "~/context/language-context";
 
 const Wrapper = styled.div`
   display: flex;

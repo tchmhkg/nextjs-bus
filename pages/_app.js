@@ -3,7 +3,7 @@ import { AnimateSharedLayout } from 'framer-motion';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 
-import { LanguageProvider } from '~/context/LanguageContext';
+import { LanguageProvider } from '~/context/language-context';
 import ThemeManager from '~/theme';
 
 Router.events.on('routeChangeStart', () => NProgress.start());

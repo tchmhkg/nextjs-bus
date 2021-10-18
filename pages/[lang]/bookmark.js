@@ -10,8 +10,8 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   background: ${({theme}) => theme.background};
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: 70px;
   left: 0;
   width: 100%;
   padding: 20px 15px 10px 15px;

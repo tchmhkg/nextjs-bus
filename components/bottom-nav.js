@@ -5,8 +5,8 @@ import useTranslation from '~/hooks/useTranslation';
 
 const Container = styled.div`
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 25px);
-  ${'' /* margin-bottom: env(safe-area-inset-bottom); */}
+  bottom: 0;
+  padding-bottom: 35px;
   width: 100vw;
   display: flex;
   align-items: center;

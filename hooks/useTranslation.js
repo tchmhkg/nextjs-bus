@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { LanguageContext } from "~/context/LanguageContext";
+import { LanguageContext } from "~/context/language-context";
 import strings from "~/translations/strings";
 import { defaultLocale } from "~/translations/config";
 
