@@ -29,7 +29,8 @@ const strings = {
     "It's empty here.": "It's empty here.",
     "Routes": "Routes",
     "Bus stops": "Bus stops",
-    "Update": "Update",
+    "Update": "Update Routes",
+    "Updating": "Updating...",
     "Updated": "Updated",
   },
   zh: {
@@ -62,7 +63,8 @@ const strings = {
     "It's empty here.": "你的列表為空",
     "Routes": "路線",
     "Bus stops": "巴士站",
-    "Update": "更新",
+    "Update": "更新路線",
+    "Updating": "更新中...",
     "Updated": "更新成功",
   },
 };

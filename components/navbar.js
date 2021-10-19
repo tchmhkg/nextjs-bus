@@ -74,19 +74,22 @@ const GitHubButton = memo(() => (
 
 const Header = () => {
   const { t } = useTranslation();
+  const [loading, isLoading] = useState(false)
   const { setRoutes } = React.useContext(KmbContext);
 
   const updateRoutes = async () => {
+    isLoading(true)
     const routes = await getKmbRoutes();
     if (routes) {
       setRoutes(routes);
       alert(t('Updated'));
     }
+    isLoading(false)
   };
   return (
     <Container>
       <LeftWrapper>
-        <UpdateButton onClick={updateRoutes}>{t('Update')}</UpdateButton>
+        <UpdateButton onClick={updateRoutes}>{t(loading ? 'Updating' : 'Update')}</UpdateButton>
       </LeftWrapper>
       <RightWrapper>
         <GitHubButton />
