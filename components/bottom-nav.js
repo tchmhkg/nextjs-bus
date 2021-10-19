@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { memo, useState } from 'react';
 import styled from 'styled-components';
 import useTranslation from '~/hooks/useTranslation';
@@ -41,6 +42,7 @@ const NavItem = styled.div`
   height: 50px;
   cursor: pointer;
   position: relative;
+  font-weight: ${({active}) => active ? '500' : 'normal'};
   &:not(:last-child) {
     &::after {
       content: "";
@@ -60,13 +62,16 @@ const NavItem = styled.div`
 
 const Item = ({ label, link }) => {
   const { t, locale } = useTranslation();
+  const router = useRouter();
+  const isActive = router.asPath === `/${locale}${link ? ('/'+link): ''}`
+
   return (
     <Link
       key={`${label}-${link}`}
       href={`/[lang]/${link}`}
-      as={`/${locale}/${link}`}
+      as={`/${locale}${link ? ('/'+link): ''}`}
     >
-      <NavItem>
+      <NavItem active={isActive}>
         <div>{t(label)}</div>
       </NavItem>
     </Link>

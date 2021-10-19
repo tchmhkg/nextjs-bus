@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import React, { memo, useState } from 'react';
 import styled from 'styled-components';
+import { KmbContext } from '~/context/kmb-context';
 import useTranslation from '~/hooks/useTranslation';
 import { getKmbRoutes } from '~/services/kmb-service';
 // import Menu from "~/components/menu";
@@ -19,8 +20,8 @@ const Container = styled.div`
   height: 70px;
   background-color: ${(props) => props.theme.kmbRed};
   z-index: ${({ shouldUpdateZIndex }) => (shouldUpdateZIndex ? 20 : 15)};
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.2);
   @media (min-width: 768px) {
     padding-right: 15px;
@@ -73,10 +74,12 @@ const GitHubButton = memo(() => (
 
 const Header = () => {
   const { t } = useTranslation();
+  const { setRoutes } = React.useContext(KmbContext);
+
   const updateRoutes = async () => {
     const routes = await getKmbRoutes();
     if (routes) {
-      window.localStorage.KMB_ROUTES_LIST = routes;
+      setRoutes(routes);
       alert(t('Updated'));
     }
   };

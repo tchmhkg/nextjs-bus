@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { useStorage } from '~/hooks/useStorage';
+import { KmbContext } from '~/context/kmb-context';
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.backgroundAlt};
@@ -22,32 +22,18 @@ const Container = styled.div`
 `;
 
 const Suggestion = ({ input, onClickSuggestion = () => {}, clickedSuggestion = false, ...props }) => {
-  const {localStorage} = useStorage();
-  const [list, setList] = useState([]);
+  const { routes } = React.useContext(KmbContext);
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    const getDataFromStorage = async () => {
-      const rawData = localStorage['KMB_ROUTES_LIST'];
-      if(rawData) {
-        const dataArray = [...new Set(rawData.split(','))];
-        setList(dataArray);
-      }
-    };
-    if(localStorage && (!list || !list?.length)) {
-      getDataFromStorage();
-    }
-  }, [localStorage]);
-
-  useEffect(() => {
     if (input) {
-      const filteredList = list.filter((route) => route.indexOf(input) > -1);
+      const filteredList = routes.filter((route) => route.indexOf(input) > -1);
       // console.log('filter',filteredList);
       setFiltered(filteredList);
     } else {
       setFiltered([]);
     }
-  }, [input]);
+  }, [input, routes]);
 
   const onClickItem = useCallback((route) => {
     onClickSuggestion(route);
