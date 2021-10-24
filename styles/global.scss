@@ -1,5 +1,12 @@
 @import "nprogress";
 
+html {
+
+  height  : 100%;
+  overflow: hidden;
+  position: relative;
+}
+
 html,
 body {
   padding: 0;
@@ -11,6 +18,8 @@ body {
 }
 
 body {
+  height  : 100%;
+  overflow: auto;
   -webkit-transition: background-color 200ms linear;
   -ms-transition: background-color 200ms linear;
   transition: background-color 200ms linear;
