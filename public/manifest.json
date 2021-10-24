@@ -1,7 +1,7 @@
 {
   "name": "NextBus",
   "short_name": "NextBus",
-  "theme_color": "#7F00FF",
+  "theme_color": "#E60002",
   "background_color": "#FFFFFF",
   "display": "standalone",
   "scope": "/",
