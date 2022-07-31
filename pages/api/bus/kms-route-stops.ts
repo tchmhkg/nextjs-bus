@@ -30,7 +30,12 @@ export default async function handler(
       const stops = []
 
       for (let i = 0; i < list.length - 1; i++) {
-        const stopApiRes = await axios.get(API_HOST + API_ENDPOINTS.stops.stop)
+        const stopApiRes = await axios.get(
+          API_HOST + API_ENDPOINTS.stops.stop.replace('{stop_id}', list[i].stop)
+        )
+
+        const stopData = stopApiRes?.data?.data
+        list[i].detail = stopData
       }
       res.json({
         success: true,
