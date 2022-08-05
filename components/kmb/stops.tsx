@@ -44,7 +44,6 @@ const List = styled.ol`
 `;
 
 const Stops = ({ loading = false }) => {
-console.log("🚀 ~ file: stops.tsx ~ line 47 ~ Stops ~ loading", loading)
   const { locale, t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
   const { stops } = useSelector(getBusState)

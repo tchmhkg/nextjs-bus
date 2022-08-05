@@ -2,7 +2,6 @@ import SearchInput from '@components/common/input';
 import useTranslation from '@hooks/useTranslation';
 import { useWindowSize } from '@hooks/useWindowSize';
 import { getBusState } from '@store/slices/busSlice';
-import { getStringByLocale } from '@utils/index';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -45,8 +44,7 @@ const Home = () => {
   const [loadingStops, setLoadingStops] = useState(false);
   const [selectedRouteDesc, setSelectedRouteDesc] = useState(null);
 
-  const {routeNumList, routes} = useSelector(getBusState)
-  console.log("🚀 ~ file: home.tsx ~ line 49 ~ Home ~ routes", routes)
+  const { routeNumList, routes } = useSelector(getBusState)
 
   // useEffect(() => {
   //   if(busNumber) {
@@ -101,10 +99,10 @@ const Home = () => {
     // }
   }
 
-  const onClickRoute = (route: any) => {
-    setSelectedRoute(route);
-    const oriDestString = `${getStringByLocale(route, 'origin', locale)} ${String.fromCodePoint(0x2192)} ${getStringByLocale(route, 'destination', locale)}`
-    setSelectedRouteDesc(route?.route?.number + " - " + oriDestString)
+  const onClickRoute = () => {
+    // setSelectedRoute(route);
+    // const oriDestString = `${getStringByLocale(route, 'origin', locale)} ${String.fromCodePoint(0x2192)} ${getStringByLocale(route, 'destination', locale)}`
+    // setSelectedRouteDesc(route?.route?.number + " - " + oriDestString)
     if (windowWidth < 769) {
       setShowBottomSheet(true);
     }
@@ -120,10 +118,6 @@ const Home = () => {
         <SearchInput
           onChange={setBusNumber}
           value={busNumber}
-          onFocus={() => setClickedSuggestion(false)}
-          // onClickButton={getRoutes}
-          onClickSuggestion={onClickSuggestion}
-          clickedSuggestion={clickedSuggestion}
         />
         <Routes loading={loadingRoutes} onClickRoute={onClickRoute} />
         {windowWidth < 769 ? <MobileStops loading={loadingStops} showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} routeDesc={selectedRouteDesc} /> : <Stops loading={loadingStops} />}

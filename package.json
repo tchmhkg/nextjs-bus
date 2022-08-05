@@ -17,6 +17,7 @@
     "gray-matter": "^4.0.2",
     "kmb-api": "tchmhkg/kmb-api",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "next": "latest",
     "next-compose-plugins": "^2.2.1",
     "nprogress": "^0.2.0",

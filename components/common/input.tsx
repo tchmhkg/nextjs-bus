@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
 import useTranslation from "@hooks/useTranslation";
@@ -52,6 +52,7 @@ const Clear = styled.div`
 const SearchInput = (props) => {
   const { t } = useTranslation();
   const searchTextInput = useRef(null);
+  const [focused, setFocused] = useState<boolean>(false)
 
   const handleChange = useCallback(
     (e) => {
@@ -68,7 +69,8 @@ const SearchInput = (props) => {
           autoCorrect="false"
           value={props?.value}
           onChange={handleChange}
-          onFocus={props.onFocus}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           ref={searchTextInput}
           placeholder={t(props.placeholder)}
           aria-labelledby={t(props.placeholder)}
@@ -76,7 +78,7 @@ const SearchInput = (props) => {
         {props.value && <Clear onClick={clearInput}>{t('Clear')}</Clear>}
         {/* <button onClick={props.onClickButton}>{t('Submit')}</button> */}
       </InputWrapper>
-      <Suggestion onClickSuggestion={props.onClickSuggestion} input={props.value} clickedSuggestion={props.clickedSuggestion} />
+      <Suggestion inputFocused={focused} input={props.value} onClick={props.onChange} />
     </Container>
   );
 };

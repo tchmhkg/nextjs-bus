@@ -22,16 +22,24 @@ const Container = styled.div`
   }
 `;
 
-const Suggestion = ({ input, onClickSuggestion = () => undefined, clickedSuggestion = false, ...props }) => {
+const Suggestion = ({ input, inputFocused = false, onClick, ...props }) => {
   const dispatch = useDispatch()
-  const { routes} = useSelector(getBusState)
+  const { routes } = useSelector(getBusState)
   const [filtered, setFiltered] = useState([]);
+  const [show, setShow] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (inputFocused) {
+      setShow(true)
+    }
+  }, [inputFocused])
 
   useEffect(() => {
     if (input) {
       const filteredList = Object.keys(routes).filter((route) => route.indexOf(input) > -1);
       // console.log('filter',filteredList);
       setFiltered(filteredList);
+      setShow(true)
     } else {
       setFiltered([]);
     }
@@ -39,12 +47,12 @@ const Suggestion = ({ input, onClickSuggestion = () => undefined, clickedSuggest
 
   const onClickItem = useCallback((route: string) => {
     const routeData = routes[route]
-    console.log("🚀 ~ file: suggestion.tsx ~ line 42 ~ onClickItem ~ routeData", routeData)
-    dispatch(setRoute({route, directions: routeData}))
-    onClickSuggestion();
-  }, [dispatch, onClickSuggestion, routes])
+    dispatch(setRoute({ route, directions: routeData }))
+    onClick(route)
+    setShow(false)
+  }, [dispatch, onClick, routes])
 
-  if (clickedSuggestion) return null;
+  if (!show) return null;
 
   return (
     <Container>

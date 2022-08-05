@@ -1,21 +1,23 @@
 import useTranslation from '@hooks/useTranslation';
 import { getStops } from '@services/kmb-service';
-import { IRoute, setStops } from '@store/slices/busSlice';
+import { IRoute, setRouteDirection, setStops } from '@store/slices/busSlice';
 import { getStringByLocale } from '@utils/index';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-const Route = ({ route, onClick = (route) => { } }) => {
+const Route = ({ route, onClick = () => { } }) => {
   const dispatch = useDispatch()
   const { t, locale } = useTranslation();
 
   const getStopsByDirection = useCallback(async (direction: IRoute) => {
+    dispatch(setRouteDirection(direction))
+    dispatch(setStops(null))
     const response = await getStops(direction);
     if (response) {
-      console.log("🚀 ~ file: route.tsx ~ line 15 ~ getStopsByDirection ~ response", response)
       dispatch(setStops(response))
+      onClick()
     }
-  }, [dispatch])
+  }, [dispatch, onClick])
 
   return (
     <div onClick={() => getStopsByDirection(route)}>

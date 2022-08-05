@@ -29,6 +29,7 @@ export interface BusState {
     route: string
     directions: IRoute[]
   }
+  routeDirection: IRoute
   stops: IStop[]
   stop: IStop
 }
@@ -40,6 +41,7 @@ const initialState: BusState = {
   routeNumList: null,
   routes: null,
   route: null,
+  routeDirection: null,
   stops: null,
   stop: null,
 } as const
@@ -72,6 +74,12 @@ export const busSlice = createSlice({
     ) => {
       state.route = action.payload
     },
+    setRouteDirection: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.routeDirection>
+    ) => {
+      state.routeDirection = action.payload
+    },
     setStops: (
       state: Draft<typeof initialState>,
       action: PayloadAction<typeof initialState.stops>
@@ -91,7 +99,13 @@ export const busSlice = createSlice({
 export const getBusState = (state: { bus: BusState }) => state.bus
 
 // Exports all actions
-export const { setRoutes, setRouteNumList, setStop, setRoute, setStops } =
-  busSlice.actions
+export const {
+  setRoutes,
+  setRouteNumList,
+  setStop,
+  setRoute,
+  setStops,
+  setRouteDirection,
+} = busSlice.actions
 
 export default busSlice.reducer

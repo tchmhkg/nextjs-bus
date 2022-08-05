@@ -1,25 +1,43 @@
-import Kmb from 'kmb-api';
+import { IRoute } from '@store/slices/busSlice'
+import { API_ENDPOINTS, API_HOST } from '@utils/apiUrls'
+import axios from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-const kmb = new Kmb();
-
-export default async function handler(req, res) {
-  const {stopping, lang = 'en'} = req.query;
-
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
-    const stoppingJson = JSON.parse(stopping);
-    stoppingJson.__proto__ = kmb.Stopping.prototype;
+    if (req.method !== 'POST') {
+      res.status(405).send({ message: 'Only POST requests allowed' })
+      return
+    }
+    const { route, stopId }: { route: Partial<IRoute>; stopId: string } =
+      req.body
 
-    const etas = await stoppingJson.getEtas();
-
-    res.json({
-      success: true,
-      data: etas || [],
-    });
+    const url =
+      API_HOST +
+      API_ENDPOINTS.eta.routeStop
+        .replace('{route}', route.route)
+        .replace('{stop_id}', stopId)
+        .replace('{service_type}', route.service_type)
+    const apiRes = await axios.get(url)
+    if (apiRes?.data) {
+      res.json({
+        success: true,
+        etas: apiRes?.data,
+      })
+    } else {
+      res.json({
+        success: false,
+        etas: [],
+      })
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.json({
       success: false,
-      data: [],
-    });
+      etas: [],
+    })
   }
 }

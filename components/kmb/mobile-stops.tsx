@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { BottomSheet as SwipeableBottomSheet } from 'react-spring-bottom-sheet';
 import 'react-spring-bottom-sheet/dist/style.css';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Refresh from '@components/refresh';
 import useTranslation from '@hooks/useTranslation';
 import { getBusState } from '@store/slices/busSlice';
+import { getStringByLocale } from '@utils/index';
 import { useSelector } from 'react-redux';
 import Stop from './stop';
 
@@ -63,12 +64,14 @@ const Stops = ({
   loading = false,
   showBottomSheet,
   setShowBottomSheet = (show: boolean) => { },
-  routeDesc = null,
 }) => {
   const { locale, t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
-  const { stops } = useSelector(getBusState)
-  console.log("🚀 ~ file: mobile-stops.tsx ~ line 71 ~ stops", stops)
+  const { stops, routeDirection } = useSelector(getBusState)
+
+  const routeDesc = useMemo(() => {
+    return `${getStringByLocale(routeDirection, 'orig', locale)} ${String.fromCodePoint(0x2192)} ${getStringByLocale(routeDirection, 'dest', locale)}`
+  }, [locale, routeDirection])
 
   const onClickRefresh = useCallback(() => setRefresh(true), []);
 

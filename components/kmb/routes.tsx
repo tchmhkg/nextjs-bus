@@ -19,12 +19,11 @@ const Container = styled.div`
   }
 `;
 
-const Routes = ({ loading = false, onClickRoute = (route: any) => { } }) => {
+const Routes = ({ loading = false, onClickRoute = () => undefined }) => {
   const { t } = useTranslation();
-  const { route} = useSelector(getBusState)
-  console.log("🚀 ~ file: routes.tsx ~ line 25 ~ Routes ~ route", route)
-  // console.log(routes);
-  if(!route) return null
+  const { route } = useSelector(getBusState)
+
+  if (!route) return null
   return (
     <Container>
       <h5>{t('Routes')}</h5>

@@ -46,7 +46,7 @@ const Stop: React.FC<IStop> = ({ stop = {}, setRefresh = () => { }, refresh = fa
       <BookmarkButton stop={stop} />
       <div className="stop-detail" onClick={toggle}>{getStringByLocale(stop, 'name', locale)}{/*stop.fare > 0 && <Fare>{fare}</Fare>*/}</div>
       {open && (
-        <Etas setRefresh={setRefresh} refresh={refresh} stopping={stop} />
+        <Etas setRefresh={setRefresh} refresh={refresh} stopId={stop.stop} />
       )}
     </li>
   );

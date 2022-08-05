@@ -2,14 +2,14 @@ import Layout from "@components/layout";
 import { getKmbRoutes } from '@services/kmb-service';
 import { setRouteNumList, setRoutes } from '@store/slices/busSlice';
 import dynamic from 'next/dynamic';
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-const Home = dynamic(import('@components/home'), {ssr: false});
+const Home = dynamic(import('@components/home'), { ssr: false });
 
 const IndexPage = () => {
   const dispatch = useDispatch()
-  
+
   const updateRoutes = useCallback(async () => {
     const response = await getKmbRoutes();
     if (response) {
@@ -18,7 +18,7 @@ const IndexPage = () => {
     }
   }, [dispatch])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateRoutes()
   }, [updateRoutes])
 
