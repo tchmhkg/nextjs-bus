@@ -8,7 +8,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { route }: { route: IRoute } = req.query
+    if (req.method !== 'POST') {
+      res.status(405).send({ message: 'Only POST requests allowed' })
+      return
+    }
+    const { route }: { route: Partial<IRoute> } = req.body
 
     const direction =
       route.bound === 'I' ? 'inbound' : route.bound === 'O' ? 'outbound' : null
@@ -30,12 +34,11 @@ export default async function handler(
       const stops = []
 
       for (let i = 0; i < list.length - 1; i++) {
-        const stopApiRes = await axios.get(
-          API_HOST + API_ENDPOINTS.stops.stop.replace('{stop_id}', list[i].stop)
-        )
+        const busStopUrl = API_HOST + API_ENDPOINTS.stops.stop.replace('{stop_id}', list[i].stop)
+        const stopApiRes = await axios.get(busStopUrl)
 
         const stopData = stopApiRes?.data?.data
-        list[i].detail = stopData
+        stops.push({seq: list[i].seq, ...stopData})
       }
       res.json({
         success: true,

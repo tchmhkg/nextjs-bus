@@ -18,7 +18,8 @@ Router.events.on('routeChangeError', () => NProgress.done());
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <Provider store={store}>
-      <LayoutGroup>      <ThemeManager>
+      <LayoutGroup>
+        <ThemeManager>
         <LanguageProvider lang={pageProps.localization?.locale}>
           <KmbProvider>
             <Component {...pageProps} />

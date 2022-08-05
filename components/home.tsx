@@ -1,10 +1,11 @@
 import SearchInput from '@components/common/input';
-import { useKmb } from '@hooks/useKmb';
 import useTranslation from '@hooks/useTranslation';
 import { useWindowSize } from '@hooks/useWindowSize';
+import { getBusState } from '@store/slices/busSlice';
 import { getStringByLocale } from '@utils/index';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const Routes = dynamic(import('@components/kmb/routes'));
@@ -34,9 +35,8 @@ const Container = styled.div`
 const Home = () => {
   const { locale } = useTranslation();
   const { width: windowWidth } = useWindowSize();
-  const kmb = useKmb();
+  // const kmb = useKmb();
   const [busNumber, setBusNumber] = useState('');
-  const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [stops, setStops] = useState([]);
   const [clickedSuggestion, setClickedSuggestion] = useState(false);
@@ -44,6 +44,9 @@ const Home = () => {
   const [loadingRoutes, setLoadingRoutes] = useState(false);
   const [loadingStops, setLoadingStops] = useState(false);
   const [selectedRouteDesc, setSelectedRouteDesc] = useState(null);
+
+  const {routeNumList, routes} = useSelector(getBusState)
+  console.log("🚀 ~ file: home.tsx ~ line 49 ~ Home ~ routes", routes)
 
   // useEffect(() => {
   //   if(busNumber) {
@@ -57,10 +60,10 @@ const Home = () => {
     }
   }, [selectedRoute])
 
-  const onClickSuggestion = async (route) => {
+  const onClickSuggestion = () => {
     setClickedSuggestion(true);
-    setBusNumber(route);
-    getRoutes(route);
+    // setBusNumber(route);
+    // getRoutes(route);
     // setClickedSuggestion(false);
   }
 
@@ -68,24 +71,21 @@ const Home = () => {
     if (!busNumber && !routeNumber) return;
     const number = (routeNumber || busNumber).toString();
     setLoadingRoutes(true);
-    setRoutes([]);
-    setStops([]);
-    const busRoutes = await kmb?.getRoutes(number?.toUpperCase());
-    if (busRoutes) {
-      let results = [];
-      for (let i = 0; i < busRoutes.length; i++) {
-        const busVariant = (await busRoutes[i].getVariants()).sort((a, b) => a.serviceType - b.serviceType)[0];
-        results.push(busVariant);
-      }
-      setRoutes(results);
+    const busRoutes = []//await kmb?.getRoutes(number?.toUpperCase());
+    // if (busRoutes) {
+    //   let results = [];
+    //   for (let i = 0; i < busRoutes.length; i++) {
+    //     const busVariant = (await busRoutes[i].getVariants()).sort((a, b) => a.serviceType - b.serviceType)[0];
+    //     results.push(busVariant);
+    //   }
 
-      const isSelectedBefore = (selectedRoute?.route?.number === number.toUpperCase()) ? results.find(route => {
-        return (route.route.number === selectedRoute.route.number) && (route.route.bound === selectedRoute.route.bound);
-      }) : false;
-      if (isSelectedBefore) {
-        getStopsFromRoute(isSelectedBefore);
-      }
-    }
+    //   const isSelectedBefore = (selectedRoute?.route?.number === number.toUpperCase()) ? results.find(route => {
+    //     return (route.route.number === selectedRoute.route.number) && (route.route.bound === selectedRoute.route.bound);
+    //   }) : false;
+    //   if (isSelectedBefore) {
+    //     getStopsFromRoute(isSelectedBefore);
+    //   }
+    // }
     setLoadingRoutes(false);
   }
 
@@ -125,8 +125,8 @@ const Home = () => {
           onClickSuggestion={onClickSuggestion}
           clickedSuggestion={clickedSuggestion}
         />
-        <Routes loading={loadingRoutes} routes={routes} onClickRoute={onClickRoute} />
-        {windowWidth < 769 ? <MobileStops loading={loadingStops} showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} routeDesc={selectedRouteDesc} stops={stops} /> : <Stops loading={loadingStops} stops={stops} />}
+        <Routes loading={loadingRoutes} onClickRoute={onClickRoute} />
+        {windowWidth < 769 ? <MobileStops loading={loadingStops} showBottomSheet={showBottomSheet} setShowBottomSheet={setShowBottomSheet} routeDesc={selectedRouteDesc} /> : <Stops loading={loadingStops} />}
       </div>
     </Container>
   );

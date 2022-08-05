@@ -1,8 +1,9 @@
-import { KmbContext } from '@context/kmb-context';
 import useTranslation from '@hooks/useTranslation';
 import { getKmbRoutes } from '@services/kmb-service';
+import { setRouteNumList, setRoutes } from '@store/slices/busSlice';
 import dynamic from 'next/dynamic';
-import React, { memo, useState } from 'react';
+import { memo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 // import Menu from "@components/menu";
 const LanguageSwitcher = dynamic(import('@components/language-switcher'));
@@ -79,19 +80,21 @@ const GitHubButton = memo(() => (
 GitHubButton.displayName = 'GitHubButton'
 
 const Header = () => {
+  const dispatch = useDispatch()
   const { t } = useTranslation();
   const [loading, isLoading] = useState(false)
-  const { setRoutes } = React.useContext(KmbContext);
 
   const updateRoutes = async () => {
     isLoading(true)
-    const routes = await getKmbRoutes();
-    if (routes) {
-      setRoutes(routes);
+    const response = await getKmbRoutes();
+    if (response) {
+      dispatch(setRoutes(response.routes))
+      dispatch(setRouteNumList(response.routeNumList))
       alert(t('Updated'));
     }
     isLoading(false)
   };
+
   return (
     <Container>
       <LeftWrapper>

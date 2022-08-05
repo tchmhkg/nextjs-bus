@@ -5,8 +5,8 @@ export const getStringByLocale = (
 ): string => {
   if (!stringObj) return ''
   const langMap = {
-    zh: 'Zh',
-    en: 'En',
+    zh: 'tc',
+    en: 'en',
   }
-  return stringObj[`${key}${langMap[locale]}`]
+  return stringObj[`${key}_${langMap[locale]}`]
 }

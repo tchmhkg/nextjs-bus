@@ -18,7 +18,7 @@ export const API_ENDPOINTS = {
   },
   routeStop: {
     list: '/v1/transport/kmb/route-stop',
-    route: '/v1/transport/kmb/routestop/{route}/{direction}/{service_type}', // /v1/transport/kmb/route-stop/1A/outbound/1
+    route: '/v1/transport/kmb/route-stop/{route}/{direction}/{service_type}', // /v1/transport/kmb/route-stop/1A/outbound/1
   },
   eta: {
     routeStop: '/v1/transport/kmb/eta/{stop_id}/{route}/{service_type}', // /v1/transport/kmb/eta/A60AE774B09A5E44/40/1

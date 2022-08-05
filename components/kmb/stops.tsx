@@ -1,7 +1,9 @@
 import Refresh from '@components/refresh';
 import useTranslation from '@hooks/useTranslation';
+import { getBusState } from '@store/slices/busSlice';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 const Stop = dynamic(import('@components/kmb/stop'));
 
@@ -41,9 +43,11 @@ const List = styled.ol`
   }
 `;
 
-const Stops = ({ loading = false, stops }) => {
+const Stops = ({ loading = false }) => {
+console.log("🚀 ~ file: stops.tsx ~ line 47 ~ Stops ~ loading", loading)
   const { locale, t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
+  const { stops } = useSelector(getBusState)
 
   const onClickRefresh = () => setRefresh(true);
 
@@ -58,7 +62,7 @@ const Stops = ({ loading = false, stops }) => {
           {stops?.map((stop) => {
             return (
               <Stop
-                key={`${stop?.stop?.id}_${stop?.sequence}_${locale}`}
+                key={`${stop?.stop}_${stop?.seq}_${locale}`}
                 stop={stop}
                 setRefresh={setRefresh}
                 refresh={refresh}

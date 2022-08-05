@@ -1,6 +1,7 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
 export interface IStop {
+  seq: string
   stop: string
   name_en: string
   name_tc: string
@@ -24,7 +25,11 @@ export interface IRoute {
 export interface BusState {
   routeNumList: string[]
   routes: IRoute[]
-  route: IRoute
+  route: {
+    route: string
+    directions: IRoute[]
+  }
+  stops: IStop[]
   stop: IStop
 }
 
@@ -35,6 +40,7 @@ const initialState: BusState = {
   routeNumList: null,
   routes: null,
   route: null,
+  stops: null,
   stop: null,
 } as const
 
@@ -66,6 +72,12 @@ export const busSlice = createSlice({
     ) => {
       state.route = action.payload
     },
+    setStops: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.stops>
+    ) => {
+      state.stops = action.payload
+    },
     setStop: (
       state: Draft<typeof initialState>,
       action: PayloadAction<typeof initialState.stop>
@@ -79,7 +91,7 @@ export const busSlice = createSlice({
 export const getBusState = (state: { bus: BusState }) => state.bus
 
 // Exports all actions
-export const { setRoutes, setRouteNumList, setStop, setRoute } =
+export const { setRoutes, setRouteNumList, setStop, setRoute, setStops } =
   busSlice.actions
 
 export default busSlice.reducer

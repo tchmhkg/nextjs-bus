@@ -1,6 +1,8 @@
 import Route from '@components/kmb/route';
 import useTranslation from '@hooks/useTranslation';
+import { getBusState } from '@store/slices/busSlice';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -17,16 +19,19 @@ const Container = styled.div`
   }
 `;
 
-const Routes = ({ loading = false, routes, onClickRoute = (route: any) => { } }) => {
+const Routes = ({ loading = false, onClickRoute = (route: any) => { } }) => {
   const { t } = useTranslation();
+  const { route} = useSelector(getBusState)
+  console.log("🚀 ~ file: routes.tsx ~ line 25 ~ Routes ~ route", route)
   // console.log(routes);
+  if(!route) return null
   return (
     <Container>
       <h5>{t('Routes')}</h5>
       {!loading ? (
-        routes?.map((route) => (
+        route.directions?.map((route) => (
           <Route
-            key={`${route?.route?.number}_${route?.route?.bound}`}
+            key={`${route?.route}_${route?.bound}`}
             onClick={onClickRoute}
             route={route}
           />

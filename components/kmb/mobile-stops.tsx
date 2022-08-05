@@ -5,6 +5,8 @@ import styled from 'styled-components';
 
 import Refresh from '@components/refresh';
 import useTranslation from '@hooks/useTranslation';
+import { getBusState } from '@store/slices/busSlice';
+import { useSelector } from 'react-redux';
 import Stop from './stop';
 
 const RefreshButton = styled.div`
@@ -59,13 +61,14 @@ const List = styled.ol`
 
 const Stops = ({
   loading = false,
-  stops,
   showBottomSheet,
   setShowBottomSheet = (show: boolean) => { },
   routeDesc = null,
 }) => {
   const { locale, t } = useTranslation();
   const [refresh, setRefresh] = useState(false);
+  const { stops } = useSelector(getBusState)
+  console.log("🚀 ~ file: mobile-stops.tsx ~ line 71 ~ stops", stops)
 
   const onClickRefresh = useCallback(() => setRefresh(true), []);
 
@@ -93,7 +96,7 @@ const Stops = ({
             {stops?.map((stop) => {
               return (
                 <Stop
-                  key={`${stop?.stop?.id}_${stop?.sequence}_${locale}`}
+                  key={`${stop?.stop}_${stop?.seq}_${locale}`}
                   stop={stop}
                   setRefresh={setRefresh}
                   refresh={refresh}

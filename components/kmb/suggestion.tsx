@@ -1,5 +1,6 @@
-import { KmbContext } from '@context/kmb-context';
-import React, { useCallback, useEffect, useState } from 'react';
+import { getBusState, setRoute } from '@store/slices/busSlice';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -21,13 +22,14 @@ const Container = styled.div`
   }
 `;
 
-const Suggestion = ({ input, onClickSuggestion = (route: any) => { }, clickedSuggestion = false, ...props }) => {
-  const { routes } = React.useContext(KmbContext);
+const Suggestion = ({ input, onClickSuggestion = () => undefined, clickedSuggestion = false, ...props }) => {
+  const dispatch = useDispatch()
+  const { routes} = useSelector(getBusState)
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     if (input) {
-      const filteredList = routes.filter((route) => route.indexOf(input) > -1);
+      const filteredList = Object.keys(routes).filter((route) => route.indexOf(input) > -1);
       // console.log('filter',filteredList);
       setFiltered(filteredList);
     } else {
@@ -35,9 +37,12 @@ const Suggestion = ({ input, onClickSuggestion = (route: any) => { }, clickedSug
     }
   }, [input, routes]);
 
-  const onClickItem = useCallback((route) => {
-    onClickSuggestion(route);
-  }, [onClickSuggestion])
+  const onClickItem = useCallback((route: string) => {
+    const routeData = routes[route]
+    console.log("🚀 ~ file: suggestion.tsx ~ line 42 ~ onClickItem ~ routeData", routeData)
+    dispatch(setRoute({route, directions: routeData}))
+    onClickSuggestion();
+  }, [dispatch, onClickSuggestion, routes])
 
   if (clickedSuggestion) return null;
 
