@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "home": "Home",
+    "bookmarks": "Bookmarks",
+    "settings": "Settings",
+    "langEn": "English",
+    "langTc": "繁體中文"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "timeFormat": "Time format",
+    "time_12hr": "12-hour",
+    "time_24hr": "24-hour",
+    "language": "Language",
+    "lang_tc": "繁體中文",
+    "lang_en": "English"
+  },
+  "search": {
+    "placeholder": "Enter route number",
+    "outbound": "Outbound",
+    "inbound": "Inbound",
+    "noResults": "No routes found",
+    "loading": "Loading...",
+    "backToBounds": "Back to direction",
+    "backToSearch": "Change route"
+  },
+  "stop": {
+    "eta": "ETA",
+    "noEta": "—",
+    "loading": "Loading...",
+    "scheduled": "Scheduled"
+  },
+  "bookmarks": {
+    "title": "Bookmarks",
+    "empty": "No bookmarks yet. Add stops from the search page.",
+    "refresh": "Refresh",
+    "remove": "Remove",
+    "viewStops": "View stops",
+    "loading": "Loading..."
+  },
+  "errors": {
+    "cacheLoadFailed": "Failed to load bus data. Please refresh.",
+    "etaLoadFailed": "Failed to load ETA.",
+    "retry": "Retry"
+  }
+}

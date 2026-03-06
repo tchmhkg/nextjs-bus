@@ -5,35 +5,27 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "@next/bundle-analyzer": "^10.0.2",
-    "axios": "^0.21.0",
-    "date-fns": "^2.16.1",
-    "framer-motion": "^2.9.5",
-    "kmb-api": "tchmhkg/kmb-api",
-    "lodash": "^4.17.20",
-    "next": "10.0.3",
-    "next-compose-plugins": "^2.2.1",
-    "next-pwa": "^3.1.5",
-    "nprogress": "^0.2.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-spring-bottom-sheet": "^3.1.1",
-    "sass": "^1.29.0",
-    "styled-components": "^5.2.1",
-    "swr": "^0.3.9"
-  },
-  "resolutions": {
-    "styled-components": "^5"
+    "@reduxjs/toolkit": "^2.3.0",
+    "next": "16.1.6",
+    "next-intl": "^3.25.0",
+    "next-themes": "^0.4.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "^1.11.1",
-    "babel-plugin-transform-remove-console": "^6.9.4",
-    "duplicate-package-checker-webpack-plugin": "^3.0.0"
-  },
-  "engines": {
-    "node": "12.x"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
