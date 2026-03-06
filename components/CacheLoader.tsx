@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loadCache } from "@/store/thunks/loadCache";
+import { Button } from "@/components/ui/Button";
 
 export function CacheLoader({ children }: { children: React.ReactNode }) {
   const t = useTranslations("errors");
@@ -24,13 +25,7 @@ export function CacheLoader({ children }: { children: React.ReactNode }) {
         <p className="text-center text-red-600 dark:text-red-400">
           {t("cacheLoadFailed")}
         </p>
-        <button
-          type="button"
-          onClick={() => loadCache(dispatch)}
-          className="rounded-lg bg-amber-500 px-4 py-2 text-white hover:bg-amber-600"
-        >
-          {t("retry")}
-        </button>
+        <Button onClick={() => loadCache(dispatch)}>{t("retry")}</Button>
       </div>
     );
   }

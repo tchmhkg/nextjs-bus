@@ -5,41 +5,11 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeBookmark } from "@/store/slices/bookmarkSlice";
-import { formatTime } from "@/lib/formatTime";
+import { formatEtaWithRelative } from "@/lib/formatTime";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import type { ETAItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
-
-function formatEtaWithExactTime(
-  eta: string | null,
-  timeFormat: "12hr" | "24hr",
-  locale: "en" | "zh-HK"
-): string {
-  if (!eta) return "—";
-  try {
-    const d = new Date(eta);
-    const now = new Date();
-    const diffMs = d.getTime() - now.getTime();
-    const diffMins = Math.round(diffMs / 60000);
-    const exactTime = formatTime(
-      eta,
-      timeFormat,
-      locale === "zh-HK" ? "zh-HK" : "en-HK"
-    );
-    if (diffMins <= 0) {
-      return locale === "zh-HK"
-        ? `${exactTime} (即將到站)`
-        : `${exactTime} (Arriving)`;
-    }
-    if (diffMins < 60) {
-      return locale === "zh-HK"
-        ? `${exactTime} (${diffMins} 分鐘)`
-        : `${exactTime} (${diffMins} min)`;
-    }
-    return exactTime;
-  } catch {
-    return "—";
-  }
-}
 
 export function BookmarkList() {
   const t = useTranslations("bookmarks");
@@ -82,13 +52,7 @@ export function BookmarkList() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={handleRefresh}
-          className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600"
-        >
-          {t("refresh")}
-        </button>
+        <Button onClick={handleRefresh}>{t("refresh")}</Button>
       </div>
       <div className="space-y-3">
         {bookmarks.map((b) => {
@@ -102,9 +66,9 @@ export function BookmarkList() {
           const searchHref = `/?route=${encodeURIComponent(b.route)}&bound=${bound}`;
 
           return (
-            <div
+            <Card
               key={b.id}
-              className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800"
+              className="flex items-center justify-between gap-3 p-4"
             >
               <Link
                 href={searchHref}
@@ -126,7 +90,7 @@ export function BookmarkList() {
                     <span className="text-zinc-500">{t("loading")}</span>
                   ) : (
                     <span className="font-medium text-amber-600 dark:text-amber-500">
-                      {formatEtaWithExactTime(
+                      {formatEtaWithRelative(
                         firstEta?.eta ?? null,
                         timeFormat,
                         locale
@@ -142,15 +106,11 @@ export function BookmarkList() {
                 >
                   {t("viewStops")}
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => dispatch(removeBookmark(b.id))}
-                  className="rounded px-3 py-1.5 text-sm text-zinc-500 hover:bg-zinc-100 hover:text-red-600 dark:hover:bg-zinc-700 dark:hover:text-red-400"
-                >
+                <Button variant="ghost" className="px-3 py-1.5" onClick={() => dispatch(removeBookmark(b.id))}>
                   {t("remove")}
-                </button>
+                </Button>
               </div>
-            </div>
+            </Card>
           );
         })}
       </div>

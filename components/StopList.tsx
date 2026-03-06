@@ -3,8 +3,9 @@
 import { useMemo } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { StopRow } from "./StopRow";
+import { Card } from "@/components/ui/Card";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
-import type { RouteStopItem, StopItem } from "@/lib/companies/kmb/types";
+import type { StopItem } from "@/lib/companies/kmb/types";
 
 export interface StopListProps {
   route: string;
@@ -51,7 +52,7 @@ export function StopList({ route, bound }: StopListProps) {
   }, [routeStopList, stopMap, route, bound]);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800">
+    <Card className="overflow-hidden">
       <div className="max-h-96 overflow-y-auto">
         {stops.map((s) => (
           <StopRow
@@ -69,6 +70,6 @@ export function StopList({ route, bound }: StopListProps) {
           />
         ))}
       </div>
-    </div>
+    </Card>
   );
 }

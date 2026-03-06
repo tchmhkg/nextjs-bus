@@ -3,11 +3,18 @@
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedBound } from "@/store/slices/searchSlice";
+import { SelectableCard } from "@/components/ui/SelectableCard";
 import { logger } from "@/lib/logger";
 import type { RouteItem } from "@/lib/companies/kmb/types";
 
 export interface BoundSelectorProps {
   route: string;
+}
+
+function getName(item: RouteItem, locale: "en" | "zh-HK"): string {
+  const orig = locale === "zh-HK" ? item.orig_tc : item.orig_en;
+  const dest = locale === "zh-HK" ? item.dest_tc : item.dest_en;
+  return `${orig} → ${dest}`;
 }
 
 export function BoundSelector({ route }: BoundSelectorProps) {
@@ -28,12 +35,6 @@ export function BoundSelector({ route }: BoundSelectorProps) {
     logger.debug("Bound selected", { route, bound });
   };
 
-  const getName = (item: RouteItem) => {
-    const orig = locale === "zh-HK" ? item.orig_tc : item.orig_en;
-    const dest = locale === "zh-HK" ? item.dest_tc : item.dest_en;
-    return `${orig} → ${dest}`;
-  };
-
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
@@ -41,32 +42,18 @@ export function BoundSelector({ route }: BoundSelectorProps) {
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {outbound && (
-          <button
-            type="button"
+          <SelectableCard
+            label={t("outbound")}
+            description={getName(outbound, locale)}
             onClick={() => handleSelect("O")}
-            className="rounded-lg border-2 border-zinc-200 bg-white p-4 text-left transition hover:border-amber-500 hover:bg-amber-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-amber-500 dark:hover:bg-amber-900/20"
-          >
-            <span className="text-xs font-medium text-amber-600 dark:text-amber-500">
-              {t("outbound")}
-            </span>
-            <p className="mt-1 font-medium text-zinc-900 dark:text-zinc-50">
-              {getName(outbound)}
-            </p>
-          </button>
+          />
         )}
         {inbound && (
-          <button
-            type="button"
+          <SelectableCard
+            label={t("inbound")}
+            description={getName(inbound, locale)}
             onClick={() => handleSelect("I")}
-            className="rounded-lg border-2 border-zinc-200 bg-white p-4 text-left transition hover:border-amber-500 hover:bg-amber-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-amber-500 dark:hover:bg-amber-900/20"
-          >
-            <span className="text-xs font-medium text-amber-600 dark:text-amber-500">
-              {t("inbound")}
-            </span>
-            <p className="mt-1 font-medium text-zinc-900 dark:text-zinc-50">
-              {getName(inbound)}
-            </p>
-          </button>
+          />
         )}
       </div>
     </div>

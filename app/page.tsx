@@ -7,6 +7,7 @@ import { RouteSearchInput } from "@/components/RouteSearchInput";
 import { BoundSelector } from "@/components/BoundSelector";
 import { StopList } from "@/components/StopList";
 import { CacheLoader } from "@/components/CacheLoader";
+import { PageLayout } from "@/components/ui/PageLayout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute, setSelectedBound } from "@/store/slices/searchSlice";
 
@@ -27,15 +28,12 @@ export default function HomePage() {
 
   return (
     <CacheLoader>
-      <main className="mx-auto max-w-md px-4 py-6">
-        <h1 className="mb-6 text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          KMB Bus ETA
-        </h1>
+      <PageLayout title="KMB Bus ETA">
         <div className="space-y-6">
           <RouteSearchInput />
           <SearchContent />
         </div>
-      </main>
+      </PageLayout>
     </CacheLoader>
   );
 }
