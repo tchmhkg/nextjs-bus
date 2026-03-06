@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "Home",
+    "bookmarks": "Bookmarks",
+    "langEn": "English",
+    "langTc": "繁體中文"
+  },
+  "search": {
+    "placeholder": "Enter route number",
+    "outbound": "Outbound",
+    "inbound": "Inbound",
+    "noResults": "No routes found",
+    "loading": "Loading...",
+    "backToBounds": "Back to direction",
+    "backToSearch": "Change route"
+  },
+  "stop": {
+    "eta": "ETA",
+    "noEta": "—",
+    "loading": "Loading...",
+    "scheduled": "Scheduled"
+  },
+  "bookmarks": {
+    "title": "Bookmarks",
+    "empty": "No bookmarks yet. Add stops from the search page.",
+    "refresh": "Refresh",
+    "remove": "Remove",
+    "viewStops": "View stops",
+    "loading": "Loading..."
+  },
+  "errors": {
+    "cacheLoadFailed": "Failed to load bus data. Please refresh.",
+    "etaLoadFailed": "Failed to load ETA.",
+    "retry": "Retry"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "首頁",
+    "bookmarks": "書籤",
+    "langEn": "English",
+    "langTc": "繁體中文"
+  },
+  "search": {
+    "placeholder": "輸入路線編號",
+    "outbound": "往",
+    "inbound": "返",
+    "noResults": "找不到路線",
+    "loading": "載入中...",
+    "backToBounds": "返回方向選擇",
+    "backToSearch": "更改路線"
+  },
+  "stop": {
+    "eta": "預計到站",
+    "noEta": "—",
+    "loading": "載入中...",
+    "scheduled": "原定班次"
+  },
+  "bookmarks": {
+    "title": "書籤",
+    "empty": "尚無書籤。請從搜尋頁面加入車站。",
+    "refresh": "重新整理",
+    "remove": "移除",
+    "viewStops": "查看車站",
+    "loading": "載入中..."
+  },
+  "errors": {
+    "cacheLoadFailed": "無法載入巴士資料，請重新整理。",
+    "etaLoadFailed": "無法載入預計到站時間。",
+    "retry": "重試"
+  }
+}
