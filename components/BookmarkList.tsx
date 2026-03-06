@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeBookmark } from "@/store/slices/bookmarkSlice";
+import { formatTime } from "@/lib/formatTime";
 import type { ETAItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
 
 function formatEtaWithExactTime(
   eta: string | null,
+  timeFormat: "12hr" | "24hr",
   locale: "en" | "zh-HK"
 ): string {
   if (!eta) return "—";
@@ -18,10 +20,11 @@ function formatEtaWithExactTime(
     const now = new Date();
     const diffMs = d.getTime() - now.getTime();
     const diffMins = Math.round(diffMs / 60000);
-    const exactTime = d.toLocaleTimeString(locale === "zh-HK" ? "zh-HK" : "en-HK", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const exactTime = formatTime(
+      eta,
+      timeFormat,
+      locale === "zh-HK" ? "zh-HK" : "en-HK"
+    );
     if (diffMins <= 0) {
       return locale === "zh-HK"
         ? `${exactTime} (即將到站)`
@@ -43,6 +46,7 @@ export function BookmarkList() {
   const dispatch = useAppDispatch();
   const bookmarks = useAppSelector((s) => s.bookmarks.items);
   const locale = useAppSelector((s) => s.lang.locale);
+  const timeFormat = useAppSelector((s) => s.settings.timeFormat);
   const [etaMap, setEtaMap] = useState<Record<string, ETAItem[]>>({});
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
@@ -124,6 +128,7 @@ export function BookmarkList() {
                     <span className="font-medium text-amber-600 dark:text-amber-500">
                       {formatEtaWithExactTime(
                         firstEta?.eta ?? null,
+                        timeFormat,
                         locale
                       )}
                     </span>

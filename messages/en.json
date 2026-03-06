@@ -2,8 +2,22 @@
   "nav": {
     "home": "Home",
     "bookmarks": "Bookmarks",
+    "settings": "Settings",
     "langEn": "English",
     "langTc": "繁體中文"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "timeFormat": "Time format",
+    "time_12hr": "12-hour",
+    "time_24hr": "24-hour",
+    "language": "Language",
+    "lang_tc": "繁體中文",
+    "lang_en": "English"
   },
   "search": {
     "placeholder": "Enter route number",

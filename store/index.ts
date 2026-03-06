@@ -14,18 +14,20 @@ import { companyCacheSlice } from "./slices/companyCacheSlice";
 import { searchSlice } from "./slices/searchSlice";
 import { langSlice } from "./slices/langSlice";
 import { bookmarkSlice } from "./slices/bookmarkSlice";
+import { settingsSlice } from "./slices/settingsSlice";
 
 const rootReducer = combineReducers({
   companyCache: companyCacheSlice.reducer,
   search: searchSlice.reducer,
   lang: langSlice.reducer,
   bookmarks: bookmarkSlice.reducer,
+  settings: settingsSlice.reducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["bookmarks", "lang"],
+  whitelist: ["bookmarks", "lang", "settings"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
