@@ -28,7 +28,7 @@ export default function HomePage() {
 
   return (
     <CacheLoader>
-      <PageLayout title="KMB Bus ETA">
+      <PageLayout title="Next Bus">
         <div className="space-y-6">
           <RouteSearchInput />
           <SearchContent />

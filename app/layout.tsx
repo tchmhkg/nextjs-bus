@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import { Navbar } from "@/components/Navbar";
@@ -15,8 +15,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KMB Bus ETA",
-  description: "Search KMB bus routes and estimated arrival times",
+  title: "Next Bus",
+  description: "Search bus routes and estimated arrival times",
+  appleWebApp: {
+    capable: true,
+    title: "Next Bus",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#d97706",
 };
 
 export default function RootLayout({
