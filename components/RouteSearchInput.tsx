@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute } from "@/store/slices/searchSlice";
 import { logger } from "@/lib/logger";
+import { CompanyBadge } from "@/components/CompanyBadge";
 import type { RouteItem } from "@/lib/companies/kmb/types";
 
 const MAX_SUGGESTIONS = 20;
@@ -98,8 +99,11 @@ export function RouteSearchInput({ onFocus }: RouteSearchInputProps) {
                   onClick={() => handleSelect(route)}
                   className="w-full px-4 py-3 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20"
                 >
-                  <span className="font-semibold text-amber-600 dark:text-amber-500">
-                    {route}
+                  <span className="flex items-center gap-2">
+                    <span className="font-semibold text-amber-600 dark:text-amber-500">
+                      {route}
+                    </span>
+                    <CompanyBadge companyId="kmb" />
                   </span>
                 </button>
               </li>

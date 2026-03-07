@@ -39,7 +39,7 @@ export function StopRow({
   const [etaItems, setEtaItems] = useState<ETAItem[]>([]);
   const [etaLoading, setEtaLoading] = useState(false);
 
-  const bookmarkId = getBookmarkId("kmb", stopId, route, DEFAULT_SERVICE_TYPE);
+  const bookmarkId = getBookmarkId("kmb", stopId, route, DEFAULT_SERVICE_TYPE, bound);
   const isBookmarked = bookmarks.some((b) => b.id === bookmarkId);
 
   const fetchEta = useCallback(async () => {

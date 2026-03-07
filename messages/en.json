@@ -1,6 +1,7 @@
 {
   "nav": {
     "home": "Home",
+    "nearby": "Nearby",
     "bookmarks": "Bookmarks",
     "settings": "Settings",
     "langEn": "English",
@@ -15,11 +16,19 @@
     "timeFormat": "Time format",
     "time_12hr": "12-hour",
     "time_24hr": "24-hour",
+    "nearbyRange": "Nearby range",
+    "nearbyRange_m": "{m} m",
     "language": "Language",
     "lang_tc": "繁體中文",
-    "lang_en": "English"
+    "lang_en": "English",
+    "refreshCache": "Route data",
+    "refreshCacheButton": "Refresh route data",
+    "refreshCacheSuccess": "Route data updated",
+    "refreshCacheError": "Failed to refresh. Try again.",
+    "loading": "Loading..."
   },
   "search": {
+    "searchByRoute": "Search by route",
     "placeholder": "Enter route number",
     "outbound": "Outbound",
     "inbound": "Inbound",
@@ -41,6 +50,17 @@
     "remove": "Remove",
     "viewStops": "View stops",
     "loading": "Loading..."
+  },
+  "nearby": {
+    "title": "Nearby",
+    "withinRange": "Within {m} m",
+    "gettingLocation": "Getting your location…",
+    "locationDenied": "Enable location to see nearby routes.",
+    "locationUnavailable": "Location unavailable.",
+    "noNearbyStops": "No routes within {m} m.",
+    "loading": "Loading…",
+    "refresh": "Refresh",
+    "viewAll": "View all nearby"
   },
   "errors": {
     "cacheLoadFailed": "Failed to load bus data. Please refresh.",

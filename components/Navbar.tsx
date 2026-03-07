@@ -14,7 +14,8 @@ function isActivePath(pathname: string, href: string): boolean {
 }
 
 const NAV_ITEMS = [
-  { href: "/", labelKey: "home" as const, className: "text-lg" },
+  { href: "/", labelKey: "home" as const },
+  { href: "/nearby", labelKey: "nearby" as const },
   { href: "/bookmarks", labelKey: "bookmarks" as const },
 ] as const;
 

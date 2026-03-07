@@ -1,17 +1,16 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { BookmarkList } from "@/components/BookmarkList";
 import { CacheLoader } from "@/components/CacheLoader";
+import { NearbyETAs } from "@/components/NearbyETAs";
 import { PageLayout } from "@/components/ui/PageLayout";
 
-export default function BookmarksPage() {
-  const t = useTranslations("bookmarks");
-
+export default function NearbyPage() {
+  const t = useTranslations("nearby");
   return (
     <CacheLoader>
       <PageLayout>
-        <BookmarkList />
+        <NearbyETAs />
       </PageLayout>
     </CacheLoader>
   );

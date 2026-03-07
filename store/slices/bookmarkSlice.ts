@@ -18,9 +18,10 @@ function createBookmarkId(
   company: string,
   stopId: string,
   route: string,
-  serviceType: string
+  serviceType: string,
+  bound: "O" | "I"
 ): string {
-  return `${company}-${stopId}-${route}-${serviceType}`;
+  return `${company}-${stopId}-${route}-${serviceType}-${bound}`;
 }
 
 export interface BookmarkState {
@@ -41,15 +42,18 @@ export const bookmarkSlice = createSlice({
         payload: Omit<Bookmark, "id" | "createdAt"> & { bound?: "O" | "I" };
       }
     ) => {
+      const bound = action.payload.bound ?? "O";
       const id = createBookmarkId(
         action.payload.company,
         action.payload.stopId,
         action.payload.route,
-        action.payload.serviceType
+        action.payload.serviceType,
+        bound
       );
       if (state.items.some((b) => b.id === id)) return;
       state.items.push({
         ...action.payload,
+        bound,
         id,
         createdAt: Date.now(),
       });
@@ -63,11 +67,13 @@ export const bookmarkSlice = createSlice({
         payload: Omit<Bookmark, "id" | "createdAt"> & { bound?: "O" | "I" };
       }
     ) => {
+      const bound = action.payload.bound ?? "O";
       const id = createBookmarkId(
         action.payload.company,
         action.payload.stopId,
         action.payload.route,
-        action.payload.serviceType
+        action.payload.serviceType,
+        bound
       );
       const idx = state.items.findIndex((b) => b.id === id);
       if (idx >= 0) {
@@ -75,6 +81,7 @@ export const bookmarkSlice = createSlice({
       } else {
         state.items.push({
           ...action.payload,
+          bound,
           id,
           createdAt: Date.now(),
         });
@@ -90,7 +97,8 @@ export function getBookmarkId(
   company: string,
   stopId: string,
   route: string,
-  serviceType: string
+  serviceType: string,
+  bound: "O" | "I"
 ): string {
-  return createBookmarkId(company, stopId, route, serviceType);
+  return createBookmarkId(company, stopId, route, serviceType, bound);
 }
