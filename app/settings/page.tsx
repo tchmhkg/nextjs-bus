@@ -11,7 +11,6 @@ import { PageLayout } from "@/components/ui/PageLayout";
 import { OptionButtonGroup } from "@/components/ui/OptionButtonGroup";
 import { Button } from "@/components/ui/Button";
 import type { TimeFormat, NearbyRangeMeters } from "@/store/slices/settingsSlice";
-import { NEARBY_RANGE_OPTIONS } from "@/store/slices/settingsSlice";
 import type { Locale } from "@/store/slices/langSlice";
 
 export default function SettingsPage() {
@@ -52,8 +51,8 @@ export default function SettingsPage() {
         />
         <OptionButtonGroup
           title={t("nearbyRange")}
-          options={NEARBY_RANGE_OPTIONS.map((m) => String(m)) as readonly [string, ...string[]]}
-          value={String(nearbyRangeMeters)}
+          options={["50", "100", "200", "400"] as const}
+          value={String(nearbyRangeMeters) as "50" | "100" | "200" | "400"}
           onChange={(v) => dispatch(setNearbyRangeMeters(Number(v) as NearbyRangeMeters))}
           getLabel={(opt) => t("nearbyRange_m", { m: opt })}
         />
