@@ -17,7 +17,12 @@
     "time_24hr": "24 小時制",
     "language": "語言",
     "lang_tc": "繁體中文",
-    "lang_en": "English"
+    "lang_en": "English",
+    "refreshCache": "路線資料",
+    "refreshCacheButton": "重新載入路線資料",
+    "refreshCacheSuccess": "路線資料已更新",
+    "refreshCacheError": "更新失敗，請再試一次。",
+    "loading": "載入中..."
   },
   "search": {
     "placeholder": "輸入路線編號",

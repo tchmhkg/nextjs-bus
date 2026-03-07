@@ -8,6 +8,7 @@ import { removeBookmark } from "@/store/slices/bookmarkSlice";
 import { formatEtaWithRelative } from "@/lib/formatTime";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { CompanyBadge } from "@/components/CompanyBadge";
 import type { ETAItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
 
@@ -78,6 +79,7 @@ export function BookmarkList() {
                   <span className="font-bold text-amber-600 dark:text-amber-500">
                     {b.route}
                   </span>
+                  <CompanyBadge companyId={b.company} />
                   {dest && (
                     <span className="text-sm text-zinc-500">→ {dest}</span>
                   )}

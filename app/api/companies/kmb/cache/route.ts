@@ -16,6 +16,18 @@ export async function GET() {
       fetchRouteStopList(),
     ]);
 
+    if (!Array.isArray(routeList) || !Array.isArray(stopList) || !Array.isArray(routeStopList)) {
+      logger.error("KMB cache invalid response shape", {
+        routeListIsArray: Array.isArray(routeList),
+        stopListIsArray: Array.isArray(stopList),
+        routeStopListIsArray: Array.isArray(routeStopList),
+      });
+      return NextResponse.json(
+        { error: "Invalid cache response from data source" },
+        { status: 502 }
+      );
+    }
+
     logger.info("KMB cache loaded", {
       routeCount: routeList.length,
       stopCount: stopList.length,

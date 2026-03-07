@@ -1,12 +1,15 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setTimeFormat } from "@/store/slices/settingsSlice";
 import { setLocale } from "@/store/slices/langSlice";
+import { loadCache } from "@/store/thunks/loadCache";
 import { PageLayout } from "@/components/ui/PageLayout";
 import { OptionButtonGroup } from "@/components/ui/OptionButtonGroup";
+import { Button } from "@/components/ui/Button";
 import type { TimeFormat } from "@/store/slices/settingsSlice";
 import type { Locale } from "@/store/slices/langSlice";
 
@@ -16,8 +19,17 @@ export default function SettingsPage() {
   const dispatch = useAppDispatch();
   const timeFormat = useAppSelector((s) => s.settings.timeFormat);
   const locale = useAppSelector((s) => s.lang.locale);
+  const cacheLoading = useAppSelector((s) => s.companyCache.isLoading);
+  const [refreshMessage, setRefreshMessage] = useState<"success" | "error" | null>(null);
 
   const resolvedTheme = (theme ?? "system") as "light" | "dark" | "system";
+
+  const handleRefreshCache = useCallback(async () => {
+    setRefreshMessage(null);
+    const ok = await loadCache(dispatch);
+    setRefreshMessage(ok ? "success" : "error");
+    setTimeout(() => setRefreshMessage(null), 3000);
+  }, [dispatch]);
 
   return (
     <PageLayout title={t("title")}>
@@ -43,6 +55,29 @@ export default function SettingsPage() {
           onChange={(v) => dispatch(setLocale(v as Locale))}
           getLabel={(opt) => (opt === "zh-HK" ? t("lang_tc") : t("lang_en"))}
         />
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            {t("refreshCache")}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleRefreshCache}
+              disabled={cacheLoading}
+            >
+              {cacheLoading ? t("loading") : t("refreshCacheButton")}
+            </Button>
+            {refreshMessage === "success" && (
+              <span className="text-sm text-green-600 dark:text-green-500">
+                {t("refreshCacheSuccess")}
+              </span>
+            )}
+            {refreshMessage === "error" && (
+              <span className="text-sm text-red-600 dark:text-red-500">
+                {t("refreshCacheError")}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
     </PageLayout>
   );

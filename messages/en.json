@@ -17,7 +17,12 @@
     "time_24hr": "24-hour",
     "language": "Language",
     "lang_tc": "繁體中文",
-    "lang_en": "English"
+    "lang_en": "English",
+    "refreshCache": "Route data",
+    "refreshCacheButton": "Refresh route data",
+    "refreshCacheSuccess": "Route data updated",
+    "refreshCacheError": "Failed to refresh. Try again.",
+    "loading": "Loading..."
   },
   "search": {
     "placeholder": "Enter route number",

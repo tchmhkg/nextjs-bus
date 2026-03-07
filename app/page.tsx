@@ -10,6 +10,7 @@ import { CacheLoader } from "@/components/CacheLoader";
 import { PageLayout } from "@/components/ui/PageLayout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute, setSelectedBound } from "@/store/slices/searchSlice";
+import { CompanyBadge } from "@/components/CompanyBadge";
 
 export default function HomePage() {
   const searchParams = useSearchParams();
@@ -43,23 +44,48 @@ function SearchContent() {
   const dispatch = useAppDispatch();
   const selectedRoute = useAppSelector((s) => s.search.selectedRoute);
   const selectedBound = useAppSelector((s) => s.search.selectedBound);
+  const routeList = useAppSelector((s) => s.companyCache.kmb?.routeList ?? []);
+  const locale = useAppSelector((s) => s.lang.locale);
+
+  const routeInfo = selectedRoute && selectedBound
+    ? routeList.find(
+        (r) => r.route === selectedRoute && r.bound === selectedBound
+      )
+    : null;
+
+  const routeLabel =
+    routeInfo && selectedBound
+      ? locale === "zh-HK"
+        ? `${routeInfo.orig_tc} → ${routeInfo.dest_tc}`
+        : `${routeInfo.orig_en} → ${routeInfo.dest_en}`
+      : null;
 
   if (!selectedRoute) return null;
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() =>
-            selectedBound
-              ? dispatch(setSelectedBound(null))
-              : dispatch(setSelectedRoute(null))
-          }
-          className="text-sm text-amber-600 hover:underline dark:text-amber-500"
-        >
-          ← {selectedBound ? t("backToBounds") : t("backToSearch")}
-        </button>
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              selectedBound
+                ? dispatch(setSelectedBound(null))
+                : dispatch(setSelectedRoute(null))
+            }
+            className="text-sm text-amber-600 hover:underline dark:text-amber-500"
+          >
+            ← {selectedBound ? t("backToBounds") : t("backToSearch")}
+          </button>
+        </div>
+        {selectedBound && (
+          <p className="flex flex-wrap items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            <span>{selectedRoute}</span>
+            <CompanyBadge companyId="kmb" />
+            <span>· {selectedBound === "O" ? t("outbound") : t("inbound")}</span>
+            {routeLabel ? <span>· {routeLabel}</span> : null}
+          </p>
+        )}
       </div>
       {!selectedBound ? (
         <BoundSelector route={selectedRoute} />
