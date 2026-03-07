@@ -13,6 +13,7 @@ import { setSelectedRoute, setSelectedBound } from "@/store/slices/searchSlice";
 import { CompanyBadge } from "@/components/CompanyBadge";
 
 export default function HomePage() {
+  const t = useTranslations("search");
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
 
@@ -31,7 +32,12 @@ export default function HomePage() {
     <CacheLoader>
       <PageLayout title="Next Bus">
         <div className="space-y-6">
-          <RouteSearchInput />
+          <div>
+            <h2 className="mb-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+              {t("searchByRoute")}
+            </h2>
+            <RouteSearchInput />
+          </div>
           <SearchContent />
         </div>
       </PageLayout>

@@ -1,6 +1,7 @@
 {
   "nav": {
     "home": "首頁",
+    "nearby": "附近",
     "bookmarks": "書籤",
     "settings": "設定",
     "langEn": "English",
@@ -15,6 +16,8 @@
     "timeFormat": "時間格式",
     "time_12hr": "12 小時制",
     "time_24hr": "24 小時制",
+    "nearbyRange": "附近範圍",
+    "nearbyRange_m": "{m} 米",
     "language": "語言",
     "lang_tc": "繁體中文",
     "lang_en": "English",
@@ -25,6 +28,7 @@
     "loading": "載入中..."
   },
   "search": {
+    "searchByRoute": "按路線搜尋",
     "placeholder": "輸入路線編號",
     "outbound": "往",
     "inbound": "返",
@@ -46,6 +50,17 @@
     "remove": "移除",
     "viewStops": "查看車站",
     "loading": "載入中..."
+  },
+  "nearby": {
+    "title": "附近",
+    "withinRange": "{m} 米內",
+    "gettingLocation": "正在取得位置…",
+    "locationDenied": "請開啟定位以顯示附近路線。",
+    "locationUnavailable": "無法取得位置。",
+    "noNearbyStops": "{m} 米內沒有路線。",
+    "loading": "載入中…",
+    "refresh": "重新整理",
+    "viewAll": "查看全部附近路線"
   },
   "errors": {
     "cacheLoadFailed": "無法載入巴士資料，請重新整理。",

@@ -4,13 +4,14 @@ import { useCallback, useState } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setTimeFormat } from "@/store/slices/settingsSlice";
+import { setTimeFormat, setNearbyRangeMeters } from "@/store/slices/settingsSlice";
 import { setLocale } from "@/store/slices/langSlice";
 import { loadCache } from "@/store/thunks/loadCache";
 import { PageLayout } from "@/components/ui/PageLayout";
 import { OptionButtonGroup } from "@/components/ui/OptionButtonGroup";
 import { Button } from "@/components/ui/Button";
-import type { TimeFormat } from "@/store/slices/settingsSlice";
+import type { TimeFormat, NearbyRangeMeters } from "@/store/slices/settingsSlice";
+import { NEARBY_RANGE_OPTIONS } from "@/store/slices/settingsSlice";
 import type { Locale } from "@/store/slices/langSlice";
 
 export default function SettingsPage() {
@@ -18,6 +19,7 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const dispatch = useAppDispatch();
   const timeFormat = useAppSelector((s) => s.settings.timeFormat);
+  const nearbyRangeMeters = useAppSelector((s) => s.settings.nearbyRangeMeters);
   const locale = useAppSelector((s) => s.lang.locale);
   const cacheLoading = useAppSelector((s) => s.companyCache.isLoading);
   const [refreshMessage, setRefreshMessage] = useState<"success" | "error" | null>(null);
@@ -32,7 +34,7 @@ export default function SettingsPage() {
   }, [dispatch]);
 
   return (
-    <PageLayout title={t("title")}>
+    <PageLayout>
       <div className="space-y-3">
         <OptionButtonGroup
           title={t("theme")}
@@ -47,6 +49,13 @@ export default function SettingsPage() {
           value={timeFormat}
           onChange={(v) => dispatch(setTimeFormat(v as TimeFormat))}
           getLabel={(opt) => t(`time_${opt}`)}
+        />
+        <OptionButtonGroup
+          title={t("nearbyRange")}
+          options={NEARBY_RANGE_OPTIONS.map((m) => String(m)) as readonly [string, ...string[]]}
+          value={String(nearbyRangeMeters)}
+          onChange={(v) => dispatch(setNearbyRangeMeters(Number(v) as NearbyRangeMeters))}
+          getLabel={(opt) => t("nearbyRange_m", { m: opt })}
         />
         <OptionButtonGroup
           title={t("language")}
