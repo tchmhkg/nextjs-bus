@@ -10,6 +10,7 @@ import { loadCache } from "@/store/thunks/loadCache";
 import { PageLayout } from "@/components/ui/PageLayout";
 import { OptionButtonGroup } from "@/components/ui/OptionButtonGroup";
 import { Button } from "@/components/ui/Button";
+import { LocationPermissionSection } from "@/components/LocationPermissionSection";
 import type { TimeFormat, NearbyRangeMeters } from "@/store/slices/settingsSlice";
 import type { Locale } from "@/store/slices/langSlice";
 
@@ -63,6 +64,7 @@ export default function SettingsPage() {
           onChange={(v) => dispatch(setLocale(v as Locale))}
           getLabel={(opt) => (opt === "zh-HK" ? t("lang_tc") : t("lang_en"))}
         />
+        <LocationPermissionSection />
         <div className="space-y-2">
           <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
             {t("refreshCache")}

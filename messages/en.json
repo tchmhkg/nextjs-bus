@@ -25,7 +25,15 @@
     "refreshCacheButton": "Refresh route data",
     "refreshCacheSuccess": "Route data updated",
     "refreshCacheError": "Failed to refresh. Try again.",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "locationPermission": "Location Permission",
+    "locationPermissionStatus": "Status",
+    "locationPermissionGranted": "Granted",
+    "locationPermissionDenied": "Denied",
+    "locationPermissionPrompt": "Not set",
+    "locationPermissionUnknown": "Unknown",
+    "locationPermissionRequest": "Request Permission",
+    "locationPermissionInstructions": "Please enable location permissions in your browser settings and click refresh to try again."
   },
   "search": {
     "searchByRoute": "Search by route",
@@ -57,6 +65,7 @@
     "gettingLocation": "Getting your location…",
     "locationDenied": "Enable location to see nearby routes.",
     "locationUnavailable": "Location unavailable.",
+    "locationPermissionDenied": "Location access denied.",
     "noNearbyStops": "No routes within {m} m.",
     "loading": "Loading…",
     "refresh": "Refresh",

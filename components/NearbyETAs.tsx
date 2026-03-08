@@ -64,7 +64,10 @@ function useIntersectionObserver(
 ) {
   const ref = useRef<HTMLDivElement>(null);
   const onVisibleChangeRef = useRef(onVisibleChange);
-  onVisibleChangeRef.current = onVisibleChange;
+
+  useEffect(() => {
+    onVisibleChangeRef.current = onVisibleChange;
+  }, [onVisibleChange]);
 
   useEffect(() => {
     const el = ref.current;
@@ -186,7 +189,7 @@ export interface NearbyETAsProps {
 
 export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   const t = useTranslations("nearby");
-  const { lat, long, error: locationError, loading: locationLoading, refetch } =
+  const { lat, long, error: locationError, loading: locationLoading, permissionDenied, refetch } =
     useGeolocation();
   const stopList = useAppSelector((s) => s.companyCache.kmb?.stopList ?? []);
   const routeStopList = useAppSelector(
@@ -370,9 +373,16 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
             <RefreshIcon className="h-5 w-5" />
           </button>
         </div>
-        <p className="mt-2 text-sm text-zinc-500">
-          {locationError ? t("locationDenied") : t("locationUnavailable")}
-        </p>
+        <div className="mt-2 space-y-2">
+          <p className="text-sm text-zinc-500">
+            {permissionDenied ? t("locationPermissionDenied") : t("locationUnavailable")}
+          </p>
+          {permissionDenied && (
+            <p className="text-xs text-zinc-400">
+              {t("locationPermissionInstructions")}
+            </p>
+          )}
+        </div>
       </Card>
     );
   }
