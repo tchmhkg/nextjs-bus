@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useAppSelector } from "@/store/hooks";
@@ -15,27 +21,72 @@ import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
 import type { NearbyRouteItem } from "@/lib/companies/kmb/nearby";
 import type { Locale } from "@/store/slices/langSlice";
 
-function useVisible(onVisible: () => void) {
+const SCROLL_DEBOUNCE_MS = 280;
+const ETA_CACHE: Record<string, ETAItem[] | null> = {};
+
+function etaKey(stopId: string, route: string): string {
+  return `${stopId}|${route}`;
+}
+
+function useDebouncedVisibleKeys(
+  visibleKeysRef: RefObject<Set<string>>,
+  setVisibleKeys: (keys: string[]) => void
+) {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  return useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = null;
+      if (visibleKeysRef.current) {
+        setVisibleKeys(Array.from(visibleKeysRef.current));
+      }
+    }, SCROLL_DEBOUNCE_MS);
+  }, [visibleKeysRef, setVisibleKeys]);
+}
+
+function useScrollContainerVisibility(
+  scrollContainerRef: RefObject<HTMLDivElement | null>,
+  debouncedFlush: () => void
+) {
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const onScroll = () => debouncedFlush();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [scrollContainerRef, debouncedFlush]);
+}
+
+function useIntersectionObserver(
+  scrollRoot: HTMLDivElement | null,
+  key: string,
+  onVisibleChange: (key: string, visible: boolean) => void
+) {
   const ref = useRef<HTMLDivElement>(null);
-  const fired = useRef(false);
+  const onVisibleChangeRef = useRef(onVisibleChange);
+  onVisibleChangeRef.current = onVisibleChange;
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (fired.current) return;
-        if (entries[0]?.isIntersecting) {
-          fired.current = true;
-          onVisible();
-        }
+        const entry = entries[0];
+        if (!entry) return;
+        onVisibleChangeRef.current(key, entry.isIntersecting);
       },
-      { rootMargin: "100px", threshold: 0 }
+      {
+        root: scrollRoot,
+        rootMargin: "80px",
+        threshold: 0,
+      }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [onVisible]);
+  }, [key, scrollRoot]);
   return ref;
 }
+
 
 function NearbyRow({
   row,
@@ -46,7 +97,9 @@ function NearbyRow({
   stopName,
   destLabel,
   t,
-  registerVisible,
+  scrollRoot,
+  onVisibleChange,
+  etaKeyStr,
 }: {
   row: NearbyRouteItem;
   etaItems: ETAItem[] | null | undefined;
@@ -56,10 +109,14 @@ function NearbyRow({
   stopName: (tc: string, en: string) => string;
   destLabel: (tc: string, en: string) => string;
   t: (key: string) => string;
-  registerVisible: (key: string) => void;
+  scrollRoot: HTMLDivElement | null;
+  onVisibleChange: (key: string, visible: boolean) => void;
+  etaKeyStr: string;
 }) {
-  const ref = useVisible(
-    useCallback(() => registerVisible(etaKey(row.stopId, row.route)), [row.stopId, row.route, registerVisible])
+  const ref = useIntersectionObserver(
+    scrollRoot,
+    etaKeyStr,
+    onVisibleChange
   );
   const firstEta = Array.isArray(etaItems) ? etaItems[0] : null;
   const href = `/?route=${encodeURIComponent(row.route)}&bound=${row.bound}`;
@@ -103,12 +160,6 @@ function NearbyRow({
   );
 }
 
-const ETA_CACHE: Record<string, ETAItem[] | null> = {};
-
-function etaKey(stopId: string, route: string): string {
-  return `${stopId}|${route}`;
-}
-
 function RefreshIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -138,15 +189,44 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   const { lat, long, error: locationError, loading: locationLoading, refetch } =
     useGeolocation();
   const stopList = useAppSelector((s) => s.companyCache.kmb?.stopList ?? []);
-  const routeStopList = useAppSelector((s) => s.companyCache.kmb?.routeStopList ?? []);
+  const routeStopList = useAppSelector(
+    (s) => s.companyCache.kmb?.routeStopList ?? []
+  );
   const routeList = useAppSelector((s) => s.companyCache.kmb?.routeList ?? []);
   const locale = useAppSelector((s) => s.lang.locale);
   const timeFormat = useAppSelector((s) => s.settings.timeFormat);
-  const nearbyRangeMeters = useAppSelector((s) => s.settings.nearbyRangeMeters);
+  const nearbyRangeMeters = useAppSelector(
+    (s) => s.settings.nearbyRangeMeters
+  );
 
   const [items, setItems] = useState<NearbyRouteItem[]>([]);
   const [etaMap, setEtaMap] = useState<Record<string, ETAItem[] | null>>({});
   const [loadingEta, setLoadingEta] = useState(false);
+  const [visibleKeys, setVisibleKeys] = useState<string[]>([]);
+
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const [scrollContainerReady, setScrollContainerReady] = useState(false);
+  const visibleKeysRef = useRef<Set<string>>(new Set());
+  const fetchingKeysRef = useRef<Set<string>>(new Set());
+
+  const debouncedFlushVisible = useDebouncedVisibleKeys(
+    visibleKeysRef,
+    setVisibleKeys
+  );
+  useScrollContainerVisibility(scrollContainerRef, debouncedFlushVisible);
+
+  const onVisibleChange = useCallback(
+    (key: string, visible: boolean) => {
+      if (!visibleKeysRef.current) return;
+      if (visible) {
+        visibleKeysRef.current.add(key);
+      } else {
+        visibleKeysRef.current.delete(key);
+      }
+      debouncedFlushVisible();
+    },
+    [debouncedFlushVisible]
+  );
 
   useEffect(() => {
     if (lat == null || long == null || stopList.length === 0) return;
@@ -159,27 +239,34 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
       nearbyRangeMeters
     );
     setItems(result);
+    visibleKeysRef.current.clear();
     setVisibleKeys([]);
   }, [lat, long, stopList, routeStopList, routeList, nearbyRangeMeters]);
-
-  const [visibleKeys, setVisibleKeys] = useState<string[]>([]);
-
-  const registerVisible = useCallback((key: string) => {
-    setVisibleKeys((prev) => (prev.includes(key) ? prev : [...prev, key]));
-  }, []);
 
   const fetchEtas = useCallback(
     async (list: NearbyRouteItem[]) => {
       if (list.length === 0) return;
-      setLoadingEta(true);
+      const keysToFetch: string[] = [];
       const next: Record<string, ETAItem[] | null> = {};
+
+      for (const row of list) {
+        const key = etaKey(row.stopId, row.route);
+        if (ETA_CACHE[key] !== undefined) {
+          next[key] = ETA_CACHE[key];
+          continue;
+        }
+        if (fetchingKeysRef.current.has(key)) continue;
+        keysToFetch.push(key);
+        fetchingKeysRef.current.add(key);
+      }
+
+      if (keysToFetch.length > 0) setLoadingEta(true);
+
       await Promise.all(
         list.map(async (row) => {
           const key = etaKey(row.stopId, row.route);
-          if (ETA_CACHE[key] !== undefined) {
-            next[key] = ETA_CACHE[key];
-            return;
-          }
+          if (next[key] !== undefined) return;
+          if (!keysToFetch.includes(key)) return;
           try {
             const res = await fetch(
               `/api/companies/kmb/eta?stopId=${encodeURIComponent(row.stopId)}&route=${encodeURIComponent(row.route)}&serviceType=${DEFAULT_SERVICE_TYPE}`
@@ -190,10 +277,16 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
             next[key] = data;
           } catch {
             next[key] = null;
+            ETA_CACHE[key] = null;
+          } finally {
+            fetchingKeysRef.current.delete(key);
           }
         })
       );
-      setEtaMap((prev) => ({ ...prev, ...next }));
+
+      if (Object.keys(next).length > 0) {
+        setEtaMap((prev) => ({ ...prev, ...next }));
+      }
       setLoadingEta(false);
     },
     []
@@ -202,18 +295,23 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   useEffect(() => {
     const list = limit != null ? items.slice(0, limit) : items;
     const visibleSet = new Set(visibleKeys);
+    const fetchingSet = fetchingKeysRef.current;
     const rowsToFetch = list.filter((row) => {
       const key = etaKey(row.stopId, row.route);
-      return visibleSet.has(key) && etaMap[key] === undefined;
+      return (
+        visibleSet.has(key) &&
+        etaMap[key] === undefined &&
+        !fetchingSet.has(key)
+      );
     });
     if (rowsToFetch.length > 0) fetchEtas(rowsToFetch);
   }, [visibleKeys, items, limit, etaMap, fetchEtas]);
 
   const handleRefresh = useCallback(() => {
     refetch();
-    // Invalidate ETAs for currently visible items so they are re-fetched
     visibleKeys.forEach((key) => {
       delete ETA_CACHE[key];
+      fetchingKeysRef.current.delete(key);
     });
     setEtaMap((prev) => {
       const next = { ...prev };
@@ -225,10 +323,15 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   const displayItems = limit != null ? items.slice(0, limit) : items;
   const hasMore = limit != null && items.length > limit;
 
-  const stopName = (tc: string, en: string) =>
-    locale === "zh-HK" ? tc : en;
-  const destLabel = (destTc: string, destEn: string) =>
-    locale === "zh-HK" ? destTc : destEn;
+  const stopName = useCallback(
+    (tc: string, en: string) => (locale === "zh-HK" ? tc : en),
+    [locale]
+  );
+  const destLabel = useCallback(
+    (destTc: string, destEn: string) =>
+      locale === "zh-HK" ? destTc : destEn,
+    [locale]
+  );
 
   if (locationLoading) {
     return (
@@ -290,7 +393,9 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
             <RefreshIcon className="h-5 w-5" />
           </button>
         </div>
-        <p className="mt-2 text-sm text-zinc-500">{t("noNearbyStops", { m: nearbyRangeMeters })}</p>
+        <p className="mt-2 text-sm text-zinc-500">
+          {t("noNearbyStops", { m: nearbyRangeMeters })}
+        </p>
       </Card>
     );
   }
@@ -311,21 +416,31 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
           <RefreshIcon className="h-5 w-5" />
         </button>
       </div>
-      <p className="text-xs text-zinc-500">{t("withinRange", { m: nearbyRangeMeters })}</p>
-      <div className="max-h-[70vh] overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+      <p className="text-xs text-zinc-500">
+        {t("withinRange", { m: nearbyRangeMeters })}
+      </p>
+      <div
+        ref={(el) => {
+          scrollContainerRef.current = el;
+          if (el && !scrollContainerReady) setScrollContainerReady(true);
+        }}
+        className="max-h-[70vh] overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700"
+      >
         <ul className="space-y-2 p-2">
           {displayItems.map((row) => (
             <NearbyRow
               key={`${row.stopId}-${row.route}-${row.bound}`}
               row={row}
-              etaItems={etaMap[etaKey(row.stopId, row.route)] ?? ETA_CACHE[etaKey(row.stopId, row.route)]}
+              etaItems={etaMap[etaKey(row.stopId, row.route)]}
               loadingEta={loadingEta}
               locale={locale}
               timeFormat={timeFormat}
               stopName={stopName}
               destLabel={destLabel}
               t={t}
-              registerVisible={registerVisible}
+              scrollRoot={scrollContainerReady ? scrollContainerRef.current : null}
+              onVisibleChange={onVisibleChange}
+              etaKeyStr={etaKey(row.stopId, row.route)}
             />
           ))}
         </ul>
