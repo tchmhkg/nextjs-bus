@@ -8,7 +8,7 @@ import { removeBookmark } from "@/store/slices/bookmarkSlice";
 import { formatEtaWithRelative } from "@/lib/formatTime";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { CompanyBadge } from "@/components/CompanyBadge";
+import { CompanyBadge } from "@/components/common/CompanyBadge";
 import type { ETAItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
 

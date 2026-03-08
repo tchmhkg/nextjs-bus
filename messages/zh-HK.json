@@ -25,7 +25,15 @@
     "refreshCacheButton": "重新載入路線資料",
     "refreshCacheSuccess": "路線資料已更新",
     "refreshCacheError": "更新失敗，請再試一次。",
-    "loading": "載入中..."
+    "loading": "載入中...",
+    "locationPermission": "定位權限",
+    "locationPermissionStatus": "狀態",
+    "locationPermissionGranted": "已允許",
+    "locationPermissionDenied": "已拒絕",
+    "locationPermissionPrompt": "未設定",
+    "locationPermissionUnknown": "未知",
+    "locationPermissionRequest": "請求權限",
+    "locationPermissionInstructions": "請在瀏覽器設定中啟用定位權限，然後點擊重新整理再試一次。"
   },
   "search": {
     "searchByRoute": "按路線搜尋",
@@ -57,6 +65,7 @@
     "gettingLocation": "正在取得位置…",
     "locationDenied": "請開啟定位以顯示附近路線。",
     "locationUnavailable": "無法取得位置。",
+    "locationPermissionDenied": "定位權限已被拒絕。",
     "noNearbyStops": "{m} 米內沒有路線。",
     "loading": "載入中…",
     "refresh": "重新整理",

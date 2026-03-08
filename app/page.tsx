@@ -3,14 +3,14 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { RouteSearchInput } from "@/components/RouteSearchInput";
-import { BoundSelector } from "@/components/BoundSelector";
-import { StopList } from "@/components/StopList";
-import { CacheLoader } from "@/components/CacheLoader";
+import { RouteSearchInput } from "@/components/pages/search/RouteSearchInput";
+import { BoundSelector } from "@/components/pages/search/BoundSelector";
+import { StopList } from "@/components/common/StopList";
+import { CacheLoader } from "@/components/infra/CacheLoader";
 import { PageLayout } from "@/components/ui/PageLayout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute, setSelectedBound } from "@/store/slices/searchSlice";
-import { CompanyBadge } from "@/components/CompanyBadge";
+import { CompanyBadge } from "@/components/common/CompanyBadge";
 
 export default function HomePage() {
   const t = useTranslations("search");
