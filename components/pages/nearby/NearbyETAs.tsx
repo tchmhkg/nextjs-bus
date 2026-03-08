@@ -1,167 +1,25 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useAppSelector } from "@/store/hooks";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useScrollContainerVisibility, useDebouncedVisibleKeys } from "@/hooks/useScrollVisibility";
 import { getNearbyRoutes } from "@/lib/companies/kmb/nearby";
-import { formatDistance } from "@/lib/geo";
-import { formatEtaWithRelative } from "@/lib/formatTime";
-import { CompanyBadge } from "@/components/CompanyBadge";
+import { NearbyRow } from "./NearbyRow";
 import { Card } from "@/components/ui/Card";
 import type { ETAItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
 import type { NearbyRouteItem } from "@/lib/companies/kmb/nearby";
-import type { Locale } from "@/store/slices/langSlice";
 
-const SCROLL_DEBOUNCE_MS = 280;
 const ETA_CACHE: Record<string, ETAItem[] | null> = {};
 
 function etaKey(stopId: string, route: string): string {
   return `${stopId}|${route}`;
 }
 
-function useDebouncedVisibleKeys(
-  visibleKeysRef: RefObject<Set<string>>,
-  setVisibleKeys: (keys: string[]) => void
-) {
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  return useCallback(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      timeoutRef.current = null;
-      if (visibleKeysRef.current) {
-        setVisibleKeys(Array.from(visibleKeysRef.current));
-      }
-    }, SCROLL_DEBOUNCE_MS);
-  }, [visibleKeysRef, setVisibleKeys]);
-}
 
-function useScrollContainerVisibility(
-  scrollContainerRef: RefObject<HTMLDivElement | null>,
-  debouncedFlush: () => void
-) {
-  useEffect(() => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
-    const onScroll = () => debouncedFlush();
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, [scrollContainerRef, debouncedFlush]);
-}
-
-function useIntersectionObserver(
-  scrollRoot: HTMLDivElement | null,
-  key: string,
-  onVisibleChange: (key: string, visible: boolean) => void
-) {
-  const ref = useRef<HTMLDivElement>(null);
-  const onVisibleChangeRef = useRef(onVisibleChange);
-
-  useEffect(() => {
-    onVisibleChangeRef.current = onVisibleChange;
-  }, [onVisibleChange]);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry) return;
-        onVisibleChangeRef.current(key, entry.isIntersecting);
-      },
-      {
-        root: scrollRoot,
-        rootMargin: "80px",
-        threshold: 0,
-      }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [key, scrollRoot]);
-  return ref;
-}
-
-
-function NearbyRow({
-  row,
-  etaItems,
-  loadingEta,
-  locale,
-  timeFormat,
-  stopName,
-  destLabel,
-  t,
-  scrollRoot,
-  onVisibleChange,
-  etaKeyStr,
-}: {
-  row: NearbyRouteItem;
-  etaItems: ETAItem[] | null | undefined;
-  loadingEta: boolean;
-  locale: Locale;
-  timeFormat: "12hr" | "24hr";
-  stopName: (tc: string, en: string) => string;
-  destLabel: (tc: string, en: string) => string;
-  t: (key: string) => string;
-  scrollRoot: HTMLDivElement | null;
-  onVisibleChange: (key: string, visible: boolean) => void;
-  etaKeyStr: string;
-}) {
-  const ref = useIntersectionObserver(
-    scrollRoot,
-    etaKeyStr,
-    onVisibleChange
-  );
-  const firstEta = Array.isArray(etaItems) ? etaItems[0] : null;
-  const href = `/?route=${encodeURIComponent(row.route)}&bound=${row.bound}`;
-  return (
-    <li>
-      <div ref={ref}>
-        <Link href={href}>
-          <Card className="flex items-center justify-between gap-3 p-3 hover:opacity-95">
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="font-semibold text-amber-600 dark:text-amber-500">
-                  {row.route}
-                </span>
-                <CompanyBadge companyId="kmb" />
-                {(row.destTc || row.destEn) && (
-                  <span className="text-zinc-500">
-                    → {destLabel(row.destTc, row.destEn)}
-                  </span>
-                )}
-              </div>
-              <p className="mt-0.5 truncate text-sm text-zinc-600 dark:text-zinc-400">
-                {stopName(row.stopNameTc, row.stopNameEn)}
-                <span className="ml-1.5 text-zinc-400">
-                  · {formatDistance(row.distanceMeters, locale)}
-                </span>
-              </p>
-            </div>
-            <span className="shrink-0 text-sm font-medium text-amber-600 dark:text-amber-500">
-              {loadingEta && etaItems === undefined
-                ? t("loading")
-                : formatEtaWithRelative(
-                    firstEta?.eta ?? null,
-                    timeFormat,
-                    locale
-                  )}
-            </span>
-          </Card>
-        </Link>
-      </div>
-    </li>
-  );
-}
 
 function RefreshIcon({ className }: { className?: string }) {
   return (
@@ -326,15 +184,6 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   const displayItems = limit != null ? items.slice(0, limit) : items;
   const hasMore = limit != null && items.length > limit;
 
-  const stopName = useCallback(
-    (tc: string, en: string) => (locale === "zh-HK" ? tc : en),
-    [locale]
-  );
-  const destLabel = useCallback(
-    (destTc: string, destEn: string) =>
-      locale === "zh-HK" ? destTc : destEn,
-    [locale]
-  );
 
   if (locationLoading) {
     return (
@@ -445,9 +294,6 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
               loadingEta={loadingEta}
               locale={locale}
               timeFormat={timeFormat}
-              stopName={stopName}
-              destLabel={destLabel}
-              t={t}
               scrollRoot={scrollContainerReady ? scrollContainerRef.current : null}
               onVisibleChange={onVisibleChange}
               etaKeyStr={etaKey(row.stopId, row.route)}

@@ -1,7 +1,7 @@
 "use client";
 
-import { CacheLoader } from "@/components/CacheLoader";
-import { NearbyETAs } from "@/components/NearbyETAs";
+import { CacheLoader } from "@/components/infra/CacheLoader";
+import { NearbyETAs } from "@/components/pages/nearby/NearbyETAs";
 import { PageLayout } from "@/components/ui/PageLayout";
 
 export default function NearbyPage() {

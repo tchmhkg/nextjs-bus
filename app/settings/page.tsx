@@ -10,7 +10,7 @@ import { loadCache } from "@/store/thunks/loadCache";
 import { PageLayout } from "@/components/ui/PageLayout";
 import { OptionButtonGroup } from "@/components/ui/OptionButtonGroup";
 import { Button } from "@/components/ui/Button";
-import { LocationPermissionSection } from "@/components/LocationPermissionSection";
+import { LocationPermissionSection } from "@/components/common/LocationPermissionSection";
 import type { TimeFormat, NearbyRangeMeters } from "@/store/slices/settingsSlice";
 import type { Locale } from "@/store/slices/langSlice";
 

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute } from "@/store/slices/searchSlice";
 import { logger } from "@/lib/logger";
-import { CompanyBadge } from "@/components/CompanyBadge";
+import { CompanyBadge } from "@/components/common/CompanyBadge";
 import type { RouteItem } from "@/lib/companies/kmb/types";
 
 const MAX_SUGGESTIONS = 20;
