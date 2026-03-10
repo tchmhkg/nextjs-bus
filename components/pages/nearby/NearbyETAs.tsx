@@ -9,7 +9,7 @@ import { useScrollContainerVisibility, useDebouncedVisibleKeys } from "@/hooks/u
 import { getNearbyRoutes } from "@/lib/companies/kmb/nearby";
 import { NearbyRow } from "./NearbyRow";
 import { Card } from "@/components/ui/Card";
-import type { ETAItem } from "@/lib/companies/kmb/types";
+import type { ETAItem, RouteItem as KmbRouteItem, RouteStopItem as KmbRouteStopItem, StopItem as KmbStopItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
 import type { NearbyRouteItem } from "@/lib/companies/kmb/nearby";
 
@@ -53,13 +53,17 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
     (s) => s.company.selectedCompanyId
   );
   const stopList = useAppSelector(
-    (s) => s.companyCache[selectedCompanyId]?.stopList ?? []
+    (s) =>
+      (s.companyCache.kmb?.stopList as KmbStopItem[] | undefined) ?? []
   );
   const routeStopList = useAppSelector(
-    (s) => s.companyCache[selectedCompanyId]?.routeStopList ?? []
+    (s) =>
+      (s.companyCache.kmb?.routeStopList as KmbRouteStopItem[] | undefined) ??
+      []
   );
   const routeList = useAppSelector(
-    (s) => s.companyCache[selectedCompanyId]?.routeList ?? []
+    (s) =>
+      (s.companyCache.kmb?.routeList as KmbRouteItem[] | undefined) ?? []
   );
   const locale = useAppSelector((s) => s.lang.locale);
   const timeFormat = useAppSelector((s) => s.settings.timeFormat);
@@ -97,6 +101,12 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   );
 
   useEffect(() => {
+    if (selectedCompanyId !== "kmb") {
+      setItems([]);
+      visibleKeysRef.current.clear();
+      setVisibleKeys([]);
+      return;
+    }
     if (lat == null || long == null || stopList.length === 0) return;
     const result = getNearbyRoutes(
       stopList,
@@ -109,7 +119,15 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
     setItems(result);
     visibleKeysRef.current.clear();
     setVisibleKeys([]);
-  }, [lat, long, stopList, routeStopList, routeList, nearbyRangeMeters]);
+  }, [
+    lat,
+    long,
+    stopList,
+    routeStopList,
+    routeList,
+    nearbyRangeMeters,
+    selectedCompanyId,
+  ]);
 
   const fetchEtas = useCallback(
     async (list: NearbyRouteItem[]) => {

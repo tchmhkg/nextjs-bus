@@ -28,7 +28,11 @@ export default function SettingsPage() {
 
   const handleRefreshCache = useCallback(async () => {
     setRefreshMessage(null);
-    const ok = await loadCache(dispatch);
+    const [kmbOk, ctbOk] = await Promise.all([
+      loadCache(dispatch, "kmb"),
+      loadCache(dispatch, "ctb"),
+    ]);
+    const ok = kmbOk && ctbOk;
     setRefreshMessage(ok ? "success" : "error");
     setTimeout(() => setRefreshMessage(null), 3000);
   }, [dispatch]);

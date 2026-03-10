@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { CompanyId } from "@/lib/companies/config";
 
 export interface Bookmark {
   id: string;
-  company: "kmb";
+  company: CompanyId;
   stopId: string;
   route: string;
   bound?: "O" | "I";
