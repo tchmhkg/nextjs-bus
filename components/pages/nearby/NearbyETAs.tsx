@@ -49,11 +49,18 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
   const t = useTranslations("nearby");
   const { lat, long, error: locationError, loading: locationLoading, permissionDenied, refetch } =
     useGeolocation();
-  const stopList = useAppSelector((s) => s.companyCache.kmb?.stopList ?? []);
-  const routeStopList = useAppSelector(
-    (s) => s.companyCache.kmb?.routeStopList ?? []
+  const selectedCompanyId = useAppSelector(
+    (s) => s.company.selectedCompanyId
   );
-  const routeList = useAppSelector((s) => s.companyCache.kmb?.routeList ?? []);
+  const stopList = useAppSelector(
+    (s) => s.companyCache[selectedCompanyId]?.stopList ?? []
+  );
+  const routeStopList = useAppSelector(
+    (s) => s.companyCache[selectedCompanyId]?.routeStopList ?? []
+  );
+  const routeList = useAppSelector(
+    (s) => s.companyCache[selectedCompanyId]?.routeList ?? []
+  );
   const locale = useAppSelector((s) => s.lang.locale);
   const timeFormat = useAppSelector((s) => s.settings.timeFormat);
   const nearbyRangeMeters = useAppSelector(
@@ -129,8 +136,14 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
           if (next[key] !== undefined) return;
           if (!keysToFetch.includes(key)) return;
           try {
+            const params =
+              selectedCompanyId === "kmb"
+                ? `serviceType=${DEFAULT_SERVICE_TYPE}`
+                : `direction=${row.bound === "I" ? "inbound" : "outbound"}`;
             const res = await fetch(
-              `/api/companies/kmb/eta?stopId=${encodeURIComponent(row.stopId)}&route=${encodeURIComponent(row.route)}&serviceType=${DEFAULT_SERVICE_TYPE}`
+              `/api/companies/${selectedCompanyId}/eta?stopId=${encodeURIComponent(
+                row.stopId
+              )}&route=${encodeURIComponent(row.route)}&${params}`
             );
             const json = await res.json();
             const data = res.ok && json.data ? json.data : null;
@@ -150,7 +163,7 @@ export function NearbyETAs({ limit, showViewAll }: NearbyETAsProps) {
       }
       setLoadingEta(false);
     },
-    []
+    [selectedCompanyId]
   );
 
   useEffect(() => {

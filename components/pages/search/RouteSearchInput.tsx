@@ -6,21 +6,44 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute } from "@/store/slices/searchSlice";
 import { logger } from "@/lib/logger";
 import { CompanyBadge } from "@/components/common/CompanyBadge";
-import type { RouteItem } from "@/lib/companies/kmb/types";
+import type { RouteItem as KmbRouteItem } from "@/lib/companies/kmb/types";
+import type { CitybusRouteItem } from "@/lib/companies/citybus/types";
+import { setSelectedCompanyId } from "@/store/slices/companySlice";
+import type { CompanyId } from "@/lib/companies/config";
 
 const MAX_SUGGESTIONS = 20;
 const DEBOUNCE_MS = 200;
 
-function getUniqueRoutes(routeList: RouteItem[]): string[] {
+interface RouteSuggestion {
+  route: string;
+  company: CompanyId;
+}
+
+function buildRouteSuggestions(
+  kmbRoutes: KmbRouteItem[],
+  ctbRoutes: CitybusRouteItem[]
+): RouteSuggestion[] {
+  const suggestions: RouteSuggestion[] = [];
   const seen = new Set<string>();
-  return routeList
-    .map((r) => r.route)
-    .filter((route) => {
-      if (seen.has(route)) return false;
-      seen.add(route);
-      return true;
-    })
-    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+  for (const r of kmbRoutes) {
+    const key = `kmb|${r.route}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    suggestions.push({ route: r.route, company: "kmb" });
+  }
+
+  for (const r of ctbRoutes) {
+    const key = `ctb|${r.route}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    suggestions.push({ route: r.route, company: "ctb" });
+  }
+
+  suggestions.sort((a, b) =>
+    a.route.localeCompare(b.route, undefined, { numeric: true })
+  );
+  return suggestions;
 }
 
 export interface RouteSearchInputProps {
@@ -30,7 +53,15 @@ export interface RouteSearchInputProps {
 export function RouteSearchInput({ onFocus }: RouteSearchInputProps) {
   const t = useTranslations("search");
   const dispatch = useAppDispatch();
-  const routeList = useAppSelector((s) => s.companyCache.kmb?.routeList ?? []);
+  const selectedCompanyId = useAppSelector(
+    (s) => s.company.selectedCompanyId
+  );
+  const kmbRouteList = useAppSelector(
+    (s) => s.companyCache.kmb?.routeList ?? []
+  );
+  const ctbRouteList = useAppSelector(
+    (s) => s.companyCache.ctb?.routeList ?? []
+  );
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -41,22 +72,26 @@ export function RouteSearchInput({ onFocus }: RouteSearchInputProps) {
     return () => clearTimeout(id);
   }, [query]);
 
-  const uniqueRoutes = useMemo(() => getUniqueRoutes(routeList), [routeList]);
+  const allSuggestions = useMemo(
+    () => buildRouteSuggestions(kmbRouteList, ctbRouteList),
+    [kmbRouteList, ctbRouteList]
+  );
 
   const suggestions = useMemo(() => {
     if (!debouncedQuery.trim()) return [];
     const q = debouncedQuery.trim().toUpperCase();
-    return uniqueRoutes
-      .filter((r) => r.toUpperCase().startsWith(q))
+    return allSuggestions
+      .filter((s) => s.route.toUpperCase().startsWith(q))
       .slice(0, MAX_SUGGESTIONS);
-  }, [uniqueRoutes, debouncedQuery]);
+  }, [allSuggestions, debouncedQuery]);
 
   const handleSelect = useCallback(
-    (route: string) => {
-      dispatch(setSelectedRoute(route));
+    (s: RouteSuggestion) => {
+      dispatch(setSelectedRoute(s.route));
+      dispatch(setSelectedCompanyId(s.company));
       setQuery("");
       setIsOpen(false);
-      logger.debug("Route selected", { route });
+      logger.debug("Route selected", { route: s.route, company: s.company });
     },
     [dispatch]
   );
@@ -92,18 +127,18 @@ export function RouteSearchInput({ onFocus }: RouteSearchInputProps) {
           {suggestions.length === 0 ? (
             <li className="px-4 py-3 text-zinc-500">{t("noResults")}</li>
           ) : (
-            suggestions.map((route) => (
-              <li key={route}>
+            suggestions.map((s) => (
+              <li key={`${s.company}-${s.route}`}>
                 <button
                   type="button"
-                  onClick={() => handleSelect(route)}
+                  onClick={() => handleSelect(s)}
                   className="w-full px-4 py-3 text-left hover:bg-amber-50 dark:hover:bg-amber-900/20"
                 >
                   <span className="flex items-center gap-2">
                     <span className="font-semibold text-amber-600 dark:text-amber-500">
-                      {route}
+                      {s.route}
                     </span>
-                    <CompanyBadge companyId="kmb" />
+                    <CompanyBadge companyId={s.company} />
                   </span>
                 </button>
               </li>

@@ -41,7 +41,9 @@ export function NearbyRow({
     locale === "zh-HK" && tc ? tc : en;
 
   const firstEta = Array.isArray(etaItems) ? etaItems[0] : null;
-  const href = `/?route=${encodeURIComponent(row.route)}&bound=${row.bound}`;
+  const href = `/?route=${encodeURIComponent(
+    row.route
+  )}&bound=${row.bound}`;
 
   return (
     <li>

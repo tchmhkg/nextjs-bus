@@ -21,27 +21,36 @@ export function BookmarkList() {
   const [etaMap, setEtaMap] = useState<Record<string, ETAItem[]>>({});
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
-  const fetchEta = useCallback(async (id: string, stopId: string, route: string) => {
-    setLoadingMap((prev) => ({ ...prev, [id]: true }));
-    try {
-      const res = await fetch(
-        `/api/companies/kmb/eta?stopId=${encodeURIComponent(stopId)}&route=${encodeURIComponent(route)}&serviceType=${DEFAULT_SERVICE_TYPE}`
-      );
-      const json = await res.json();
-      if (res.ok && json.data) {
-        setEtaMap((prev) => ({ ...prev, [id]: json.data }));
+  const fetchEta = useCallback(
+    async (id: string, company: "kmb" | "ctb", stopId: string, route: string, bound?: "O" | "I") => {
+      setLoadingMap((prev) => ({ ...prev, [id]: true }));
+      try {
+        const params =
+          company === "kmb"
+            ? `serviceType=${DEFAULT_SERVICE_TYPE}`
+            : `direction=${bound === "I" ? "inbound" : "outbound"}`;
+        const res = await fetch(
+          `/api/companies/${company}/eta?stopId=${encodeURIComponent(
+            stopId
+          )}&route=${encodeURIComponent(route)}&${params}`
+        );
+        const json = await res.json();
+        if (res.ok && json.data) {
+          setEtaMap((prev) => ({ ...prev, [id]: json.data }));
+        }
+      } finally {
+        setLoadingMap((prev) => ({ ...prev, [id]: false }));
       }
-    } finally {
-      setLoadingMap((prev) => ({ ...prev, [id]: false }));
-    }
-  }, []);
+    },
+    []
+  );
 
   const handleRefresh = useCallback(() => {
-    bookmarks.forEach((b) => fetchEta(b.id, b.stopId, b.route));
+    bookmarks.forEach((b) => fetchEta(b.id, b.company, b.stopId, b.route, b.bound));
   }, [bookmarks, fetchEta]);
 
   useEffect(() => {
-    bookmarks.forEach((b) => fetchEta(b.id, b.stopId, b.route));
+    bookmarks.forEach((b) => fetchEta(b.id, b.company, b.stopId, b.route, b.bound));
   }, [bookmarks, fetchEta]);
 
   if (bookmarks.length === 0) {
@@ -64,7 +73,9 @@ export function BookmarkList() {
           const dest = locale === "zh-HK" ? b.destTc : b.destEn;
 
           const bound = b.bound ?? "O";
-          const searchHref = `/?route=${encodeURIComponent(b.route)}&bound=${bound}`;
+          const searchHref = `/?route=${encodeURIComponent(
+            b.route
+          )}&bound=${bound}&company=${b.company}`;
 
           return (
             <Card

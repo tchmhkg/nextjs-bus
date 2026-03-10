@@ -9,15 +9,19 @@ import { Button } from "@/components/ui/Button";
 export function CacheLoader({ children }: { children: React.ReactNode }) {
   const t = useTranslations("errors");
   const dispatch = useAppDispatch();
-  const cache = useAppSelector((s) => s.companyCache.kmb);
+  const kmbCache = useAppSelector((s) => s.companyCache.kmb);
+  const ctbCache = useAppSelector((s) => s.companyCache.ctb);
   const isLoading = useAppSelector((s) => s.companyCache.isLoading);
   const error = useAppSelector((s) => s.companyCache.error);
 
   useEffect(() => {
-    if (!cache && !isLoading) {
-      loadCache(dispatch);
+    if (!kmbCache) {
+      loadCache(dispatch, "kmb");
     }
-  }, [cache, isLoading, dispatch]);
+    if (!ctbCache) {
+      loadCache(dispatch, "ctb");
+    }
+  }, [kmbCache, ctbCache, dispatch]);
 
   if (error) {
     return (
@@ -25,10 +29,18 @@ export function CacheLoader({ children }: { children: React.ReactNode }) {
         <p className="text-center text-red-600 dark:text-red-400">
           {t("cacheLoadFailed")}
         </p>
-        <Button onClick={() => loadCache(dispatch)}>{t("retry")}</Button>
+        <Button
+          onClick={() => {
+            loadCache(dispatch, "kmb");
+            loadCache(dispatch, "ctb");
+          }}
+        >
+          {t("retry")}
+        </Button>
       </div>
     );
   }
 
+  // Optionally could gate on isLoading + caches, but current UX keeps children rendered.
   return <>{children}</>;
 }

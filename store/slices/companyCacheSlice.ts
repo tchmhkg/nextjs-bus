@@ -1,18 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { RouteItem, StopItem, RouteStopItem } from "@/lib/companies/kmb/types";
+import type {
+  RouteItem as KmbRouteItem,
+  StopItem as KmbStopItem,
+  RouteStopItem as KmbRouteStopItem,
+} from "@/lib/companies/kmb/types";
+import type {
+  CitybusRouteItem,
+  CitybusStopItem,
+  CitybusRouteStopItem,
+} from "@/lib/companies/citybus/types";
+
+export interface CompanyCacheEntry<R, S, RS> {
+  routeList: R[];
+  stopList: S[];
+  routeStopList: RS[];
+}
 
 export interface CompanyCacheState {
-  kmb: {
-    routeList: RouteItem[];
-    stopList: StopItem[];
-    routeStopList: RouteStopItem[];
-  } | null;
+  kmb: CompanyCacheEntry<KmbRouteItem, KmbStopItem, KmbRouteStopItem> | null;
+  ctb: CompanyCacheEntry<CitybusRouteItem, CitybusStopItem, CitybusRouteStopItem> | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: CompanyCacheState = {
   kmb: null,
+  ctb: null,
   isLoading: false,
   error: null,
 };
@@ -29,13 +42,27 @@ export const companyCacheSlice = createSlice({
       state,
       action: {
         payload: {
-          routeList: RouteItem[];
-          stopList: StopItem[];
-          routeStopList: RouteStopItem[];
+          company: "kmb" | "ctb";
+          routeList: unknown[];
+          stopList: unknown[];
+          routeStopList: unknown[];
         };
       }
     ) => {
-      state.kmb = action.payload;
+      const { company, routeList, stopList, routeStopList } = action.payload;
+      if (company === "kmb") {
+        state.kmb = {
+          routeList: routeList as KmbRouteItem[],
+          stopList: stopList as KmbStopItem[],
+          routeStopList: routeStopList as KmbRouteStopItem[],
+        };
+      } else if (company === "ctb") {
+        state.ctb = {
+          routeList: routeList as CitybusRouteItem[],
+          stopList: stopList as CitybusStopItem[],
+          routeStopList: routeStopList as CitybusRouteStopItem[],
+        };
+      }
       state.isLoading = false;
       state.error = null;
     },

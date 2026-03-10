@@ -1,4 +1,4 @@
-export type BusCompanyId = "kmb";
+export type BusCompanyId = "kmb" | "ctb";
 
 export interface BusCompany {
   id: BusCompanyId;

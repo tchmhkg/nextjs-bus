@@ -1,26 +1,48 @@
-"use client";
+ "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setExpandedStopId } from "@/store/slices/searchSlice";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { StopRow } from "./StopRow";
 import { Card } from "@/components/ui/Card";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
+import type {
+  RouteItem as KmbRouteItem,
+  RouteStopItem as KmbRouteStopItem,
+} from "@/lib/companies/kmb/types";
 import { distanceMeters } from "@/lib/geo";
-import type { StopItem } from "@/lib/companies/kmb/types";
+import type { StopItem as KmbStopItem } from "@/lib/companies/kmb/types";
+import type {
+  CitybusStopItem,
+  CitybusRouteStopItem,
+} from "@/lib/companies/citybus/types";
 
 export interface StopListProps {
   route: string;
   bound: "O" | "I";
 }
 
+interface EnrichedStop {
+  stop: string;
+  seq: number;
+  stopNameTc: string;
+  stopNameEn: string;
+  lat?: number;
+  long?: number;
+}
+
 export function StopList({ route, bound }: StopListProps) {
   const dispatch = useAppDispatch();
-  const routeStopList = useAppSelector(
-    (s) => s.companyCache.kmb?.routeStopList ?? []
+  const selectedCompanyId = useAppSelector(
+    (s) => s.company.selectedCompanyId
   );
-  const stopList = useAppSelector((s) => s.companyCache.kmb?.stopList ?? []);
+  const routeStopList = useAppSelector(
+    (s) => s.companyCache[selectedCompanyId]?.routeStopList ?? []
+  );
+  const stopList = useAppSelector(
+    (s) => s.companyCache[selectedCompanyId]?.stopList ?? []
+  );
   const expandedStopId = useAppSelector((s) => s.search.expandedStopId);
   const locale = useAppSelector((s) => s.lang.locale);
   const { lat, long } = useGeolocation();
@@ -29,20 +51,91 @@ export function StopList({ route, bound }: StopListProps) {
   );
   const nearestRowRef = useRef<HTMLDivElement | null>(null);
 
-  const stopMap = useMemo(() => {
-    const m = new Map<string, StopItem>();
-    stopList.forEach((s) => m.set(s.stop.trim(), s));
-    return m;
-  }, [stopList]);
+  const [ctbRouteStops, setCtbRouteStops] = useState<CitybusRouteStopItem[]>(
+    []
+  );
+  const [ctbStops, setCtbStops] = useState<CitybusStopItem[]>([]);
 
-  const routeList = useAppSelector((s) => s.companyCache.kmb?.routeList ?? []);
+  useEffect(() => {
+    if (selectedCompanyId !== "ctb") return;
+    setCtbRouteStops([]);
+    setCtbStops([]);
+
+    const controller = new AbortController();
+    const direction = bound === "I" ? "inbound" : "outbound";
+
+    (async () => {
+      try {
+        const res = await fetch(
+          `/api/companies/citybus/route-stop?route=${encodeURIComponent(
+            route
+          )}&direction=${direction}`,
+          { signal: controller.signal }
+        );
+        const json = await res.json();
+        if (!res.ok || !json.routeStopList || !json.stopList) return;
+        setCtbRouteStops(json.routeStopList as CitybusRouteStopItem[]);
+        setCtbStops(json.stopList as CitybusStopItem[]);
+      } catch {
+        // ignore errors for now; UI will just show no stops
+      }
+    })();
+
+    return () => controller.abort();
+  }, [route, bound, selectedCompanyId]);
+
+  const stopMap = useMemo(() => {
+    const m = new Map<string, KmbStopItem | CitybusStopItem>();
+    if (selectedCompanyId === "kmb") {
+      stopList.forEach((s) =>
+        m.set(s.stop.trim(), s as KmbStopItem | CitybusStopItem)
+      );
+    } else {
+      ctbStops.forEach((s) =>
+        m.set(s.stop.trim(), s as KmbStopItem | CitybusStopItem)
+      );
+    }
+    return m;
+  }, [stopList, ctbStops, selectedCompanyId]);
+
+  const routeList = useAppSelector(
+    (s) =>
+      s.companyCache[selectedCompanyId]?.routeList as
+        | KmbRouteItem[]
+        | undefined ?? []
+  );
   const routeInfo = useMemo(
-    () => routeList.find((r) => r.route === route && r.bound === bound),
+    () =>
+      routeList.find((r) => {
+        const anyRoute = r as KmbRouteItem;
+        return anyRoute.route === route && anyRoute.bound === bound;
+      }),
     [routeList, route, bound]
   );
 
-  const stops = useMemo(() => {
-    return routeStopList
+  const stops: EnrichedStop[] = useMemo(() => {
+    if (selectedCompanyId === "ctb") {
+      return ctbRouteStops
+        .filter(
+          (rs) =>
+            rs.route === route &&
+            rs.dir === bound
+        )
+        .sort((a, b) => a.seq - b.seq)
+        .map((rs) => {
+          const stop = stopMap.get(rs.stop.trim());
+          return {
+            stop: rs.stop,
+            seq: rs.seq,
+            stopNameTc: stop?.name_tc ?? rs.stop,
+            stopNameEn: stop?.name_en ?? rs.stop,
+            lat: stop?.lat,
+            long: stop?.long,
+          };
+        });
+    }
+
+    return (routeStopList as KmbRouteStopItem[])
       .filter(
         (rs) =>
           rs.route === route &&
@@ -53,14 +146,15 @@ export function StopList({ route, bound }: StopListProps) {
       .map((rs) => {
         const stop = stopMap.get(rs.stop.trim());
         return {
-          ...rs,
+          stop: rs.stop,
+          seq: rs.seq,
           stopNameTc: stop?.name_tc ?? rs.stop,
           stopNameEn: stop?.name_en ?? rs.stop,
           lat: stop?.lat,
           long: stop?.long,
         };
       });
-  }, [routeStopList, stopMap, route, bound]);
+  }, [selectedCompanyId, ctbRouteStops, routeStopList, stopMap, route, bound]);
 
   const nearestStopId = useMemo(() => {
     if (lat == null || long == null || stops.length === 0) return null;

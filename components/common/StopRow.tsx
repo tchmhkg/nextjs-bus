@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger";
 import { ETADisplay } from "./ETADisplay";
 import type { ETAItem } from "@/lib/companies/kmb/types";
 import { DEFAULT_SERVICE_TYPE } from "@/lib/companies/kmb/utils";
+import type { CompanyId } from "@/lib/companies/config";
 
 export interface StopRowProps {
   stopId: string;
@@ -36,18 +37,34 @@ export function StopRow({
 }: StopRowProps) {
   const dispatch = useAppDispatch();
   const bookmarks = useAppSelector((s) => s.bookmarks.items);
+  const selectedCompanyId = useAppSelector(
+    (s) => s.company.selectedCompanyId
+  );
   const [etaItems, setEtaItems] = useState<ETAItem[]>([]);
   const [etaLoading, setEtaLoading] = useState(false);
+  const [hasFetchedEta, setHasFetchedEta] = useState(false);
 
-  const bookmarkId = getBookmarkId("kmb", stopId, route, DEFAULT_SERVICE_TYPE, bound);
+  const bookmarkId = getBookmarkId(
+    selectedCompanyId,
+    stopId,
+    route,
+    DEFAULT_SERVICE_TYPE,
+    bound
+  );
   const isBookmarked = bookmarks.some((b) => b.id === bookmarkId);
 
   const fetchEta = useCallback(async () => {
     setEtaLoading(true);
     logger.debug("Fetching ETA for stop", { stopId, route });
     try {
+      const params =
+        selectedCompanyId === "kmb"
+          ? `serviceType=${DEFAULT_SERVICE_TYPE}`
+          : `direction=${bound === "I" ? "inbound" : "outbound"}`;
       const res = await fetch(
-        `/api/companies/kmb/eta?stopId=${encodeURIComponent(stopId)}&route=${encodeURIComponent(route)}&serviceType=${DEFAULT_SERVICE_TYPE}`
+        `/api/companies/${selectedCompanyId}/eta?stopId=${encodeURIComponent(
+          stopId
+        )}&route=${encodeURIComponent(route)}&${params}`
       );
       const json = await res.json();
       if (res.ok && json.data) {
@@ -61,14 +78,15 @@ export function StopRow({
       });
     } finally {
       setEtaLoading(false);
+      setHasFetchedEta(true);
     }
-  }, [stopId, route]);
+  }, [stopId, route, selectedCompanyId, bound]);
 
   useEffect(() => {
-    if (isExpanded && etaItems.length === 0 && !etaLoading) {
+    if (isExpanded && !hasFetchedEta && !etaLoading) {
       fetchEta();
     }
-  }, [isExpanded, etaItems.length, etaLoading, fetchEta]);
+  }, [isExpanded, hasFetchedEta, etaLoading, fetchEta]);
 
   const handleRowClick = () => {
     dispatch(setExpandedStopId(isExpanded ? null : stopId));
@@ -78,7 +96,7 @@ export function StopRow({
     e.stopPropagation();
     dispatch(
       toggleBookmark({
-        company: "kmb",
+        company: selectedCompanyId as CompanyId,
         stopId,
         route,
         bound,

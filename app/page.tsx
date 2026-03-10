@@ -11,6 +11,10 @@ import { PageLayout } from "@/components/ui/PageLayout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedRoute, setSelectedBound } from "@/store/slices/searchSlice";
 import { CompanyBadge } from "@/components/common/CompanyBadge";
+import { setSelectedCompanyId } from "@/store/slices/companySlice";
+import type { CompanyId } from "@/lib/companies/config";
+import type { RouteItem as KmbRouteItem } from "@/lib/companies/kmb/types";
+import type { CitybusRouteItem } from "@/lib/companies/citybus/types";
 
 export default function HomePage() {
   const t = useTranslations("search");
@@ -20,11 +24,15 @@ export default function HomePage() {
   useEffect(() => {
     const route = searchParams.get("route");
     const bound = searchParams.get("bound");
+    const company = searchParams.get("company") as CompanyId | null;
     if (route) {
       dispatch(setSelectedRoute(route));
       if (bound === "O" || bound === "I") {
         dispatch(setSelectedBound(bound));
       }
+    }
+    if (company === "kmb" || company === "ctb") {
+      dispatch(setSelectedCompanyId(company));
     }
   }, [searchParams, dispatch]);
 
@@ -50,14 +58,28 @@ function SearchContent() {
   const dispatch = useAppDispatch();
   const selectedRoute = useAppSelector((s) => s.search.selectedRoute);
   const selectedBound = useAppSelector((s) => s.search.selectedBound);
-  const routeList = useAppSelector((s) => s.companyCache.kmb?.routeList ?? []);
+  const selectedCompanyId = useAppSelector(
+    (s) => s.company.selectedCompanyId
+  );
+  const routeList = useAppSelector(
+    (s) =>
+      s.companyCache[selectedCompanyId]?.routeList as
+        | KmbRouteItem[]
+        | CitybusRouteItem[]
+        | undefined ?? []
+  );
   const locale = useAppSelector((s) => s.lang.locale);
 
-  const routeInfo = selectedRoute && selectedBound
-    ? routeList.find(
-        (r) => r.route === selectedRoute && r.bound === selectedBound
-      )
-    : null;
+  const routeInfo =
+    selectedRoute && selectedBound
+      ? routeList.find((r) => {
+          const anyRoute = r as KmbRouteItem;
+          return (
+            anyRoute.route === selectedRoute &&
+            anyRoute.bound === selectedBound
+          );
+        })
+      : null;
 
   const routeLabel =
     routeInfo && selectedBound
@@ -87,7 +109,7 @@ function SearchContent() {
         {selectedBound && (
           <p className="flex flex-wrap items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
             <span>{selectedRoute}</span>
-            <CompanyBadge companyId="kmb" />
+            <CompanyBadge companyId={selectedCompanyId} />
             <span>· {selectedBound === "O" ? t("outbound") : t("inbound")}</span>
             {routeLabel ? <span>· {routeLabel}</span> : null}
           </p>

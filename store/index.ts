@@ -15,6 +15,7 @@ import { searchSlice } from "./slices/searchSlice";
 import { langSlice } from "./slices/langSlice";
 import { bookmarkSlice } from "./slices/bookmarkSlice";
 import { settingsSlice } from "./slices/settingsSlice";
+import { companySlice } from "./slices/companySlice";
 
 const rootReducer = combineReducers({
   companyCache: companyCacheSlice.reducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   lang: langSlice.reducer,
   bookmarks: bookmarkSlice.reducer,
   settings: settingsSlice.reducer,
+  company: companySlice.reducer,
 });
 
 const persistConfig = {
