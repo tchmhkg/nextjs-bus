@@ -5,6 +5,19 @@ import {
   fetchCitybusStop,
 } from "@/lib/companies/citybus/api";
 
+interface CitybusRouteStopCacheEntry {
+  routeStopList: Awaited<ReturnType<typeof fetchCitybusRouteStopsForRoute>>;
+  stopList: NonNullable<Awaited<ReturnType<typeof fetchCitybusStop>>>[];
+  cachedAt: number;
+}
+
+const CITYBUS_ROUTE_STOP_CACHE = new Map<string, CitybusRouteStopCacheEntry>();
+const CACHE_TTL_MS = 60_000;
+
+function cacheKey(route: string, direction: "inbound" | "outbound"): string {
+  return `${route}|${direction}`;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const route = searchParams.get("route");
@@ -23,10 +36,19 @@ export async function GET(request: NextRequest) {
   logger.info("Citybus route-stop request", { route, direction });
 
   try {
-    const routeStopList = await fetchCitybusRouteStopsForRoute(
-      route,
-      direction
-    );
+    const key = cacheKey(route, direction);
+    const now = Date.now();
+
+    const existing = CITYBUS_ROUTE_STOP_CACHE.get(key);
+    if (existing && now - existing.cachedAt < CACHE_TTL_MS) {
+      logger.info("Citybus route-stop cache hit", { route, direction });
+      return NextResponse.json({
+        routeStopList: existing.routeStopList,
+        stopList: existing.stopList,
+      });
+    }
+
+    const routeStopList = await fetchCitybusRouteStopsForRoute(route, direction);
 
     const uniqueStopIds = Array.from(
       new Set(routeStopList.map((rs) => rs.stop.trim()))
@@ -45,6 +67,12 @@ export async function GET(request: NextRequest) {
     const stopList = stopResults.filter(
       (s): s is NonNullable<typeof s> => s != null
     );
+
+    CITYBUS_ROUTE_STOP_CACHE.set(key, {
+      routeStopList,
+      stopList,
+      cachedAt: now,
+    });
 
     return NextResponse.json({
       routeStopList,
